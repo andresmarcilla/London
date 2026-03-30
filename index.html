@@ -3,115 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Architectural London Explorer - Maps Edition</title>
+    <title>Architect's London - Marathon Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Chosen Palette: Architectural Blueprint (Stone/Zinc) with a "London Underground" red (Rose-600) for interactive hotspots. -->
-    <!-- Application Structure Plan: The SPA is organized as an "Interactive Field Guide". It starts with a Global Step Analysis (Chart.js) to visualize the physical commitment. The core is an interactive sidebar-content split. When a day is selected, it populates the view with morning/afternoon/Banksy POIs, each equipped with dedicated Google Maps API links to facilitate real-time navigation while walking 20k steps. -->
-    <!-- Visualization & Content Choices: 
-         1. Step Bar Chart -> Goal: Compare daily physical effort -> Method: Chart.js Bar -> Interaction: Syncs with sidebar selection.
-         2. Map-Linked Itinerary -> Goal: Guide navigation -> Method: Dynamic HTML generation with query-string Google Maps URLs.
-         3. Minimalist Sidebar -> Goal: Information architecture clarity -> Method: Vertical scrolling tab list.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
     <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: #f5f5f4; 
-            color: #1c1917; 
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .chart-container { position: relative; width: 100%; max-width: 800px; margin: auto; height: 320px; }
+        .tab-active { background-color: #e11d48; color: white; border-color: #e11d48; }
+        .tab-inactive { background-color: transparent; color: #475569; border-color: #cbd5e1; }
+        .tab-inactive:hover { background-color: #f1f5f9; }
+        .map-link { 
+            display: inline-flex; align-items: center; background: #1e293b; color: #f8fafc; 
+            padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; 
+            transition: all 0.2s; margin-top: 0.5rem; border: 1px solid #334155;
         }
-        .chart-container { 
-            position: relative; 
-            width: 100%; 
-            max-width: 800px; 
-            margin: auto; 
-            height: 350px; 
-        }
-        .tab-active {
-            background-color: #e11d48; 
-            color: white;
-            border-color: #e11d48;
-        }
-        .tab-inactive {
-            background-color: transparent;
-            color: #44403c;
-            border-color: #d6d3d1;
-        }
-        .tab-inactive:hover { background-color: #f5f5f4; }
-        .map-btn {
-            display: inline-flex;
-            align-items: center;
-            background: #1c1917;
-            color: #f5f5f4;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            margin-top: 0.5rem;
-        }
-        .map-btn:hover { background: #e11d48; transform: translateY(-1px); }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(15px); } to { opacity: 1; transform: translateX(0); } }
-        .animate-slide { animation: slideIn 0.3s ease-out; }
+        .map-link:hover { background: #e11d48; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-ui { animation: fadeIn 0.4s ease-out; }
     </style>
 </head>
-<body class="antialiased pb-20">
+<body class="antialiased pb-24">
 
-    <header class="bg-stone-900 text-stone-50 py-10 px-6 border-b-4 border-rose-600 shadow-xl">
+    <header class="bg-slate-900 text-white py-12 px-6 border-b-8 border-rose-600">
         <div class="max-w-6xl mx-auto">
-            <h1 class="text-3xl md:text-5xl font-bold tracking-tighter mb-3">Architectural <span class="text-rose-600">London</span> Field Guide</h1>
-            <p class="text-stone-400 font-light max-w-2xl text-lg">A 10-day navigation system for architects. 160k total steps. High-tech engineering meets guerrilla street art.</p>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tighter">THE <span class="text-rose-600">ARCHITECT'S</span> LONDON</h1>
+                    <p class="text-slate-400 mt-2 text-lg font-light italic">10 Days | 180k Steps | Brutalism, Tech & Stencils</p>
+                </div>
+                <div class="bg-rose-600 text-white px-4 py-2 rounded text-xs font-bold uppercase tracking-widest">
+                    Sky Garden Confirmed: Apr 26 @ 17:00
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 mt-8 space-y-10">
+    <main class="max-w-6xl mx-auto px-4 mt-10 space-y-12">
 
-        <!-- LOGISTICS & ETA -->
-        <section class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm grid md:grid-cols-3 gap-6">
-            <div class="md:col-span-2">
-                <h2 class="text-xl font-bold mb-3 flex items-center gap-2">
-                    <span class="p-1 bg-stone-100 rounded">📍</span> Trip Context
-                </h2>
-                <p class="text-stone-600 text-sm leading-relaxed mb-4">
-                    Base: <span class="font-bold">Smart Hyde Park Inn</span>. Your itinerary is calibrated for walking. Use the "View on Map" buttons to trigger live GPS navigation to exact POI coordinates.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://www.gov.uk/guidance/apply-for-an-electronic-travel-authorisation-eta" target="_blank" class="text-xs font-bold text-rose-600 hover:underline">Apply for UK ETA →</a>
-                    <a href="https://www.thetrainline.com/" target="_blank" class="text-xs font-bold text-rose-600 hover:underline">Book Train Tickets →</a>
+        <section class="bg-white p-8 rounded-2xl border border-slate-200 shadow-xl animate-ui">
+            <h2 class="text-2xl font-black mb-6 flex items-center gap-3 italic text-slate-800">
+                🚨 PRIORITY BOOKING ORDER
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-4 border-l-4 border-rose-600 bg-rose-50">
+                    <span class="text-[10px] font-bold text-rose-600 uppercase">1. Immediate</span>
+                    <h3 class="font-black text-slate-900">Roman Baths</h3>
+                    <p class="text-xs text-slate-600 mt-1">Apr 22 @ 14:30. Prices rise daily.</p>
                 </div>
-            </div>
-            <div class="bg-rose-50 p-4 rounded-lg border border-rose-100 self-center">
-                <h3 class="text-rose-900 font-bold text-xs uppercase mb-2">Architect's Gear</h3>
-                <ul class="text-xs text-rose-800 space-y-1">
-                    <li>• 40L Base Backpack (at Hostel)</li>
-                    <li>• 10L Daypack (with Maps App)</li>
-                    <li>• Moleskine + Fineliner Pen</li>
-                </ul>
+                <div class="p-4 border-l-4 border-amber-500 bg-amber-50">
+                    <span class="text-[10px] font-bold text-amber-600 uppercase">2. Critical Free</span>
+                    <h3 class="font-black text-slate-900">Sir John Soane's</h3>
+                    <p class="text-xs text-slate-600 mt-1">Apr 25 @ 10:00. Limited slots.</p>
+                </div>
+                <div class="p-4 border-l-4 border-slate-400 bg-slate-50">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">3. High Flow</span>
+                    <h3 class="font-black text-slate-900">British Museum</h3>
+                    <p class="text-xs text-slate-600 mt-1">Apr 25 @ 12:30. Fast security entry.</p>
+                </div>
+                <div class="p-4 border-l-4 border-slate-400 bg-slate-50">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase">4. Optional</span>
+                    <h3 class="font-black text-slate-900">Lift 109</h3>
+                    <h3 class="font-black text-slate-900">Lift 109</h3>
+                    <p class="text-xs text-slate-600 mt-1">Apr 26 @ 11:00. Battersea View.</p>
+                </div>
             </div>
         </section>
 
-        <!-- STEP ANALYSIS -->
-        <section class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
-            <h2 class="text-lg font-bold mb-4">Daily Physical Load (Steps)</h2>
+        <section class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 class="text-xl font-black mb-4 uppercase tracking-tight">Walking Metabolism (Steps/Day)</h2>
             <div class="chart-container">
                 <canvas id="stepsChart"></canvas>
             </div>
         </section>
 
-        <!-- EXPLORER -->
-        <section class="bg-white rounded-xl border border-stone-200 shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[600px]">
-            <!-- Sidebar -->
-            <div class="w-full md:w-80 bg-stone-50 border-r border-stone-200 overflow-y-auto max-h-[600px]" id="sidebar">
-                <!-- Days will be injected here -->
-            </div>
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[650px]">
+            <div class="w-full md:w-80 bg-slate-50 border-r border-slate-200 overflow-y-auto" id="sidebar">
+                </div>
 
-            <!-- Content Details -->
-            <div class="flex-1 p-6 md:p-10 bg-white overflow-y-auto" id="details-view">
-                <div class="flex flex-col items-center justify-center h-full text-stone-300">
-                    <span class="text-6xl mb-4">🗺️</span>
-                    <p class="text-lg font-medium">Select a day to view coordinates & architecture data.</p>
+            <div class="flex-1 p-8 md:p-12 bg-white" id="details-view">
+                <div class="flex flex-col items-center justify-center h-full text-slate-300 text-center">
+                    <span class="text-7xl mb-6">📐</span>
+                    <p class="text-xl font-bold uppercase tracking-widest text-slate-400">Select a day to review coordinates</p>
                 </div>
             </div>
         </section>
@@ -121,252 +94,163 @@
     <script>
         const itinerary = [
             {
-                day: 1,
-                date: "Sat 18 Apr",
-                title: "Arrival & Base Alignment",
-                steps: 5000,
-                morning: "Transit from Airport to Smart Hyde Park Inn (Bayswater).",
-                morningPOI: "Smart Hyde Park Inn",
-                afternoon: "Queensway urban survey. Observation of 'Whiteleys' redevelopment.",
-                afternoonPOI: "Whiteleys London",
-                banksy: "The Painter (Acklam Road). Protected mural under the Westway.",
-                banksyPOI: "Acklam Road Banksy",
-                route: "Bayswater to Notting Hill"
+                day: 1, date: "Sat 18 Apr", title: "Arrival & Orientation", steps: 5000,
+                morning: "Airport Transit to Smart Hyde Park Inn.", morningPOI: "Smart Hyde Park Inn Bayswater",
+                afternoon: "Queensway / Whiteleys urban survey.", afternoonPOI: "Whiteleys London Development",
+                banksy: "Acklam Road Banksy (Notting Hill).", banksyPOI: "Acklam Road Banksy",
+                route: "Bayswater to Notting Hill Walk"
             },
             {
-                day: 2,
-                date: "Sun 19 Apr",
-                title: "Concrete & Brutalist Scale",
-                steps: 18000,
-                morning: "South Bank survey: Royal Festival Hall and Denys Lasdun's National Theatre.",
-                morningPOI: "National Theatre London",
-                afternoon: "Westminster axis: Palace of Westminster and the 14th-century wood roof of Westminster Hall.",
-                afternoonPOI: "Westminster Hall",
-                banksy: "Leake Street Graffiti Tunnel (Waterloo Arches).",
-                banksyPOI: "Leake Street Tunnel",
-                route: "South Bank to Westminster"
+                day: 2, date: "Sun 19 Apr", date: "Sun 19 Apr", title: "Brutalist Textures", steps: 18000,
+                morning: "South Bank: National Theatre (Lasdun) & Festival Hall.", morningPOI: "National Theatre London",
+                afternoon: "Westminster Gothic analysis: Parliament & Abbey.", afternoonPOI: "Palace of Westminster",
+                banksy: "Leake Street Graffiti Tunnel.", banksyPOI: "Leake Street Arches",
+                route: "South Bank to Westminster Path"
             },
             {
-                day: 3,
-                date: "Mon 20 Apr",
-                title: "The High-Tech Square Mile",
-                steps: 19000,
-                morning: "Financial District: Lloyd's of London (Rogers), The Gherkin (Foster), The Scalpel.",
-                morningPOI: "Lloyd's of London Building",
-                afternoon: "Elevated survey at Garden at 120. Medieval ironwork at Leadenhall Market.",
-                afternoonPOI: "The Garden at 120",
-                banksy: "Basquiat Tributes (Beech Street). Integrated into Barbican tunnel.",
-                banksyPOI: "Beech Street Banksy",
-                route: "City of London Walk"
+                day: 3, date: "Mon 20 Apr", title: "High-Tech Corporate Hub", steps: 19000,
+                morning: "The City: Lloyd's, Gherkin, Cheesegrater.", morningPOI: "Lloyd's of London Building",
+                afternoon: "Garden at 120 (Walk-in, no booking). Medieval Leadenhall Market.", afternoonPOI: "The Garden at 120",
+                banksy: "Beech Street Basquiat Murals.", banksyPOI: "Beech Street Banksy",
+                route: "City of London Financial Tour"
             },
             {
-                day: 4,
-                date: "Tue 21 Apr",
-                title: "Exoticism & Coastal Engineering",
-                steps: 20000,
-                morning: "Brighton: John Nash's Royal Pavilion (Indo-Saracenic analysis).",
-                morningPOI: "Royal Pavilion Brighton",
-                afternoon: "Marine urbanism. The vertical engineering of the i360 tower.",
-                afternoonPOI: "British Airways i360",
-                banksy: "Kissing Policemen Site (Frederick Street).",
-                banksyPOI: "Prince Albert Pub Brighton Banksy",
-                route: "Brighton Coastal Loop"
+                day: 4, date: "Tue 21 Apr", title: "Eclectic Brighton", steps: 20000,
+                morning: "Royal Pavilion (Indo-Saracenic & Iron Framing).", morningPOI: "Royal Pavilion Brighton",
+                afternoon: "Coastal Engineering: i360 & West Pier ruins.", afternoonPOI: "British Airways i360",
+                banksy: "Prince Albert Pub (Kissing Policemen site).", banksyPOI: "Prince Albert Brighton Banksy",
+                route: "Brighton Seafront Walk"
             },
             {
-                day: 5,
-                date: "Wed 22 Apr",
-                title: "Palladian Planning (Bath)",
-                steps: 16000,
-                morning: "Bath survey (Arrive 12:20): The Circus and the Royal Crescent (John Wood).",
-                morningPOI: "The Royal Crescent Bath",
-                afternoon: "Roman Bath engineering and Pulteney Bridge (Palladian shop bridge).",
-                afternoonPOI: "Roman Baths Bath",
-                banksy: "No pieces in Bath (strict conservation zone). Focus on stone textures.",
-                banksyPOI: "Pulteney Bridge",
-                route: "Bath Circular Walk"
+                day: 5, date: "Wed 22 Apr", title: "Palladian Scale (Bath)", steps: 16000,
+                morning: "Little Venice morning walk. Train at 11:00.", morningPOI: "Little Venice London",
+                afternoon: "Bath Spa: The Circus & Royal Crescent (Arrive 12:20).", afternoonPOI: "The Royal Crescent Bath",
+                banksy: "Stone Texture Study (UNESCO Zone - No Graff).", banksyPOI: "Roman Baths Bath",
+                route: "Bath Architectural Loop"
             },
             {
-                day: 6,
-                date: "Thu 23 Apr",
-                title: "Industrial Rebirth & Heatherwick",
-                steps: 17000,
-                morning: "King's Cross: John McAslan's steel lattice and St. Pancras brickwork.",
-                morningPOI: "King's Cross Station",
-                afternoon: "Coal Drops Yard (Heatherwick). Regent's Canal industrial archaeology walk.",
-                afternoonPOI: "Coal Drops Yard",
-                banksy: "Camden High St area. Historical graffiti nodes vs current murals.",
-                banksyPOI: "Camden Market London",
+                day: 6, date: "Thu 23 Apr", title: "Heatherwick & Canals", steps: 17000,
+                morning: "King's Cross: Steel lattice & St Pancras brick.", morningPOI: "King's Cross Station",
+                afternoon: "Coal Drops Yard & Regent's Canal walk to Camden.", afternoonPOI: "Coal Drops Yard",
+                banksy: "Camden Canal Banksy historical nodes.", banksyPOI: "Camden Market",
                 route: "King's Cross to Camden Canal"
             },
             {
-                day: 7,
-                date: "Fri 24 Apr",
-                title: "Naval Baroque to Corporate Glass",
-                steps: 19000,
-                morning: "Greenwich: Wren's Old Royal Naval College and Inigo Jones' Queen's House.",
-                morningPOI: "Old Royal Naval College",
-                afternoon: "Greenwich Foot Tunnel (Victorian engineering) crossing to Canary Wharf.",
-                afternoonPOI: "Canary Wharf",
-                banksy: "Look for small stickers/stencil remnants in the dockland underpasses.",
-                banksyPOI: "Greenwich Foot Tunnel",
-                route: "Greenwich to Canary Wharf"
+                day: 7, date: "Fri 24 Apr", title: "Greenwich & The Docks", steps: 19000,
+                morning: "Greenwich: Wren & Inigo Jones masterpieces.", morningPOI: "Old Royal Naval College",
+                afternoon: "Foot Tunnel crossing to Canary Wharf Skyscrapers.", afternoonPOI: "Canary Wharf London",
+                banksy: "Look for small markers in Dockland underpasses.", banksyPOI: "Greenwich Foot Tunnel",
+                route: "Greenwich to Canary Wharf Walk"
             },
             {
-                day: 8,
-                date: "Sat 25 Apr",
-                title: "The Brutalist Utopia",
-                steps: 20000,
-                morning: "Full immersion: The Barbican Estate (levels, textures, gardens).",
-                morningPOI: "The Barbican Centre",
-                afternoon: "Sir John Soane's Museum (Light & Section masterclass) and Grafton Architects' LSE building.",
-                afternoonPOI: "Sir John Soane's Museum",
-                banksy: "Shoreditch Trail: Guard Dog (Rivington St) and Yellow Flower (Pollard St).",
-                banksyPOI: "Rivington Street Banksy",
-                route: "Barbican to Shoreditch"
+                day: 8, date: "Sat 25 Apr", title: "The Brutalist Utopia", steps: 20000,
+                morning: "The Barbican Estate (The ultimate urban machine).", morningPOI: "The Barbican Centre",
+                afternoon: "Sir John Soane's (Zenithal light) & Shoreditch street art.", afternoonPOI: "Sir John Soane's Museum",
+                banksy: "Shoreditch Trail: Guard Dog & Yellow Flower.", banksyPOI: "Rivington Street Banksy",
+                route: "Barbican to Shoreditch Walk"
             },
             {
-                day: 9,
-                date: "Sun 26 Apr",
-                title: "Power Station Regeneration",
-                steps: 15000,
-                morning: "Battersea Power Station (WilkinsonEyre). Structural brickwork and turbine hall scale.",
-                morningPOI: "Battersea Power Station",
-                afternoon: "Chelsea: Wren's Royal Hospital and contemporary high-end brick housing survey.",
-                afternoonPOI: "Royal Hospital Chelsea",
-                banksy: "No major works in Chelsea. Focus on 'Gentle' urbanism.",
-                banksyPOI: "King's Road Chelsea",
-                route: "Battersea to Chelsea"
+                day: 9, date: "Sun 26 Apr", title: "Marathon Day & Grand Finale", steps: 15000,
+                morning: "Battersea Power Station (Away from race crowds).", morningPOI: "Battersea Power Station",
+                afternoon: "Transit to City. Sky Garden (Apr 26 @ 17:00).", afternoonPOI: "Sky Garden London",
+                banksy: "Industrial scale vs Street Art irony.", banksyPOI: "The Shard",
+                route: "Battersea to Sky Garden"
             },
             {
-                day: 10,
-                date: "Mon 27 Apr",
-                title: "Bankside to Borough",
-                steps: 12000,
-                morning: "Tate Modern (Herzog & de Meuron extension) and Millennium Bridge survey.",
-                morningPOI: "Tate Modern",
-                afternoon: "Renzo Piano's Shard and the rail-integrated structure of Borough Market.",
-                afternoonPOI: "Borough Market",
-                banksy: "Southwark Bridge remnants. Check underpasses near the river.",
-                banksyPOI: "Millennium Bridge London",
-                route: "South Bank Finale"
+                day: 10, date: "Mon 27 Apr", title: "Bankside & Departure", steps: 12000,
+                morning: "Tate Modern (Herzog & de Meuron extension).", morningPOI: "Tate Modern",
+                afternoon: "Borough Market & Departure via Paddington.", afternoonPOI: "Borough Market",
+                banksy: "Riverbank small pieces (Southwark Bridge).", banksyPOI: "Borough Market Banksy",
+                route: "South Bank Walk"
             }
         ];
 
-        let stepsChart = null;
+        let chart;
 
         function init() {
             renderSidebar();
             renderChart();
-        }
-
-        function getMapUrl(query) {
-            return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+            selectDay(1);
         }
 
         function renderSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            itinerary.forEach((d, idx) => {
-                const btn = document.createElement('button');
-                btn.id = `day-btn-${d.day}`;
-                btn.className = `w-full text-left p-4 border-b border-stone-200 transition-all tab-inactive flex flex-col group`;
-                btn.onclick = () => selectDay(d.day);
-                btn.innerHTML = `
-                    <span class="text-[10px] font-black uppercase tracking-widest opacity-50 mb-1">Day 0${d.day}</span>
-                    <span class="font-bold text-sm leading-tight">${d.title}</span>
-                    <span class="text-[10px] mt-2 font-mono opacity-60">👣 ${d.steps.toLocaleString()} STEPS</span>
+            const side = document.getElementById('sidebar');
+            itinerary.forEach(d => {
+                const b = document.createElement('button');
+                b.id = `btn-${d.day}`;
+                b.className = "w-full text-left p-5 border-b border-slate-200 tab-inactive transition-all flex flex-col";
+                b.onclick = () => selectDay(d.day);
+                b.innerHTML = `
+                    <span class="text-[9px] font-black tracking-widest opacity-40 uppercase">Day 0${d.day}</span>
+                    <span class="font-bold text-sm tracking-tight">${d.title}</span>
+                    <span class="text-[10px] mt-2 font-mono opacity-60">👣 ${d.steps.toLocaleString()}</span>
                 `;
-                sidebar.appendChild(btn);
+                side.appendChild(b);
             });
         }
 
         function renderChart() {
             const ctx = document.getElementById('stepsChart').getContext('2d');
-            stepsChart = new Chart(ctx, {
+            chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: itinerary.map(d => `D${d.day}`),
                     datasets: [{
-                        label: 'Steps',
                         data: itinerary.map(d => d.steps),
-                        backgroundColor: '#d6d3d1',
+                        backgroundColor: '#cbd5e1',
                         hoverBackgroundColor: '#e11d48',
                         borderRadius: 4
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
-                        x: { grid: { display: false }, ticks: { font: { size: 10 } } }
-                    },
-                    onClick: (e, active) => {
-                        if (active.length > 0) selectDay(itinerary[active[0].index].day);
-                    }
+                    scales: { x: { grid: { display: false } }, y: { beginAtZero: true, display: false } },
+                    onClick: (e, act) => { if(act.length > 0) selectDay(itinerary[act[0].index].day); }
                 }
             });
         }
 
-        function selectDay(dayId) {
-            const data = itinerary.find(d => d.day === dayId);
+        function selectDay(id) {
+            const data = itinerary.find(d => d.day === id);
             const view = document.getElementById('details-view');
 
-            // Update UI State
-            itinerary.forEach(d => {
-                document.getElementById(`day-btn-${d.day}`).classList.replace('tab-active', 'tab-inactive');
-            });
-            document.getElementById(`day-btn-${dayId}`).classList.replace('tab-inactive', 'tab-active');
+            itinerary.forEach(d => document.getElementById(`btn-${d.day}`).classList.replace('tab-active', 'tab-inactive'));
+            document.getElementById(`btn-${id}`).classList.replace('tab-inactive', 'tab-active');
 
-            // Update Chart
-            stepsChart.data.datasets[0].backgroundColor = itinerary.map(d => d.day === dayId ? '#e11d48' : '#d6d3d1');
-            stepsChart.update();
+            chart.data.datasets[0].backgroundColor = itinerary.map(d => d.day === id ? '#e11d48' : '#cbd5e1');
+            chart.update();
 
-            // Render Details
+            const getMap = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+
             view.innerHTML = `
-                <div class="animate-slide">
-                    <div class="flex justify-between items-start mb-6">
-                        <div>
-                            <span class="text-rose-600 font-bold text-xs uppercase tracking-widest">${data.date}</span>
-                            <h3 class="text-3xl font-black text-stone-900 leading-tight">${data.title}</h3>
-                        </div>
-                        <a href="${getMapUrl(data.route)}" target="_blank" class="bg-stone-100 p-2 rounded-lg text-xs font-bold hover:bg-stone-200">
-                            🗺️ Full Route
-                        </a>
+                <div class="animate-ui">
+                    <div class="mb-8">
+                        <span class="text-rose-600 font-black text-xs uppercase tracking-widest">${data.date}</span>
+                        <h3 class="text-4xl font-black text-slate-900">${data.title}</h3>
+                        ${id === 9 ? '<p class="mt-2 text-rose-600 font-bold text-sm">⚠️ London Marathon Day: Plan for Tube/Boat transit after 15:00.</p>' : ''}
                     </div>
 
-                    <div class="space-y-8">
-                        <div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="bg-stone-800 text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Morning</span>
-                                <h4 class="font-bold text-stone-800">Architectural Context</h4>
-                            </div>
-                            <p class="text-stone-600 text-sm leading-relaxed">${data.morning}</p>
-                            <a href="${getMapUrl(data.morningPOI)}" target="_blank" class="map-btn">📍 View ${data.morningPOI} on Map</a>
+                    <div class="grid gap-10">
+                        <div class="relative pl-6 border-l-2 border-slate-100">
+                            <span class="absolute -left-[9px] top-0 w-4 h-4 bg-white border-2 border-slate-900 rounded-full"></span>
+                            <h4 class="text-xs font-black uppercase text-slate-400 mb-1">Morning Context</h4>
+                            <p class="text-slate-700 text-sm font-medium leading-relaxed">${data.morning}</p>
+                            <a href="${getMap(data.morningPOI)}" target="_blank" class="map-link">📍 Map: ${data.morningPOI}</a>
                         </div>
 
-                        <div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="bg-stone-800 text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Afternoon</span>
-                                <h4 class="font-bold text-stone-800">Urban Exploration</h4>
-                            </div>
-                            <p class="text-stone-600 text-sm leading-relaxed">${data.afternoon}</p>
-                            <a href="${getMapUrl(data.afternoonPOI)}" target="_blank" class="map-btn">📍 View ${data.afternoonPOI} on Map</a>
+                        <div class="relative pl-6 border-l-2 border-slate-100">
+                            <span class="absolute -left-[9px] top-0 w-4 h-4 bg-white border-2 border-slate-900 rounded-full"></span>
+                            <h4 class="text-xs font-black uppercase text-slate-400 mb-1">Afternoon Analysis</h4>
+                            <p class="text-slate-700 text-sm font-medium leading-relaxed">${data.afternoon}</p>
+                            <a href="${getMap(data.afternoonPOI)}" target="_blank" class="map-link">📍 Map: ${data.afternoonPOI}</a>
                         </div>
 
-                        <div class="pt-6 border-t border-stone-100">
-                            <div class="flex items-center gap-2 mb-2">
-                                <span class="bg-rose-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Banksy Trail</span>
-                                <h4 class="font-bold text-rose-600">Guerilla Markers</h4>
-                            </div>
-                            <p class="text-stone-700 text-sm italic font-medium leading-relaxed">${data.banksy}</p>
-                            <a href="${getMapUrl(data.banksyPOI)}" target="_blank" class="map-btn" style="background: #e11d48">📍 Navigate to Piece</a>
+                        <div class="p-6 bg-slate-900 rounded-2xl shadow-lg">
+                            <h4 class="text-rose-500 text-xs font-black uppercase tracking-widest mb-2">Banksy Trail</h4>
+                            <p class="text-slate-300 text-sm italic font-light">${data.banksy}</p>
+                            <a href="${getMap(data.banksyPOI)}" target="_blank" class="map-link bg-rose-600 text-white border-none mt-4">🕵️ Navigate to Piece</a>
                         </div>
-                    </div>
-
-                    <div class="mt-10 bg-stone-50 p-4 rounded-lg flex items-center justify-between">
-                        <span class="text-xs font-bold text-stone-400">DAILY WALKING GOAL</span>
-                        <span class="text-xl font-black text-stone-800">${data.steps.toLocaleString()} <span class="text-xs font-normal">steps</span></span>
                     </div>
                 </div>
             `;
