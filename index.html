@@ -284,7 +284,7 @@
                 const b = document.createElement('button');
                 b.id = `tab-${d.id}`;
                 b.className = "px-6 py-4 text-[10px] font-black uppercase tracking-tighter transition-all opacity-40";
-                b.innerText = `Day 0${d.id}`;
+                b.innerText = d.date; // MMM-DD format
                 b.onclick = () => selectDay(d.id);
                 container.appendChild(b);
             });
@@ -295,7 +295,7 @@
             loadChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: masterItinerary.map(d => `D${d.id}`),
+                    labels: masterItinerary.map(d => d.date),
                     datasets: [{
                         data: masterItinerary.map(d => d.steps),
                         backgroundColor: '#e4e4e7',
@@ -324,7 +324,7 @@
             active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
 
             document.getElementById('step-badge').innerText = `${data.steps.toLocaleString()} STEPS`;
-            document.getElementById('footer-day').innerText = `${data.id}. ${data.title}`;
+            document.getElementById('footer-day').innerText = `${data.date}: ${data.title}`;
 
             const content = document.getElementById('day-content');
             content.innerHTML = `
