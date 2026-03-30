@@ -2,255 +2,373 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>London Arch-Explorer: Option 2 (The Hack)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>London Arch-Manual | April 2026 | ✨ Gemini AI Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #fafafa; color: #18181b; }
-        .chart-container { position: relative; width: 100%; height: 280px; }
-        .timeline-line { position: absolute; left: 19px; top: 0; bottom: 0; width: 2px; background: #e4e4e7; z-index: 0; }
-        .step-node { position: relative; z-index: 10; width: 40px; height: 40px; background: white; border: 2px solid #ea580c; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; }
-        .active-day { border-left: 4px solid #ea580c; background: #fff7ed; }
-        .map-btn { 
-            background: #18181b; color: white; padding: 0.6rem 1rem; border-radius: 8px; 
-            font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
-            transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: #fafafa; color: #18181b; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .active-tab { border-bottom: 4px solid #e11d48; color: #e11d48; font-weight: 800; }
+        .chart-container { position: relative; height: 160px; width: 100%; }
+        .map-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; background: #18181b; color: white;
+            padding: 14px; border-radius: 12px; font-size: 0.85rem;
+            font-weight: 700; margin-top: 8px; transition: all 0.2s;
         }
-        .map-btn:hover { background: #ea580c; transform: scale(1.03); }
-        .nav-link { background: #ea580c; color: white; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.75rem; transition: 0.2s; }
-        .nav-link:hover { background: #c2410c; }
+        .map-btn:active { transform: scale(0.96); background: #e11d48; }
+        .ai-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 100%; background: #4f46e5; color: white;
+            padding: 10px; border-radius: 12px; font-size: 0.75rem;
+            font-weight: 700; margin-top: 8px; transition: all 0.2s;
+        }
+        .ai-btn:active { transform: scale(0.96); background: #4338ca; }
+        .timeline-item { position: relative; padding-left: 28px; border-left: 2px solid #e4e4e7; padding-bottom: 32px; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -7px; top: 0;
+            width: 12px; height: 12px; background: white;
+            border: 2px solid #18181b; border-radius: 50%;
+        }
+        .banksy-box { background: #18181b; color: #f4f4f5; border-radius: 16px; padding: 20px; border-left: 6px solid #e11d48; margin-top: 20px; }
+        
+        /* Modal and Chat Styles */
+        #ai-modal { display: none; }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #4f46e5; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-zinc-200 py-6 px-6 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-10 h-10 bg-orange-600 rounded flex items-center justify-center text-white font-black text-xl">L</div>
-                <div>
-                    <h1 class="text-xl font-black tracking-tighter">ARCH-EXPLORER <span class="text-orange-600">OPTION 2</span></h1>
-                    <p class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Base: Smart Hyde Park Inn (Bayswater)</p>
-                </div>
+    <!-- Header Fijo -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-zinc-200">
+        <div class="px-5 py-4 flex justify-between items-end">
+            <div>
+                <h1 class="text-2xl font-black tracking-tighter uppercase italic leading-none">London <span class="text-rose-600">Arch-Manual</span></h1>
+                <p class="text-[10px] font-bold text-zinc-400 tracking-widest uppercase mt-1">Base: Smart Hyde Park Inn | ✨ AI Powered</p>
             </div>
-            <div class="flex items-center gap-4 mt-4 md:mt-0">
-                <a href="index.html" class="nav-link">🔄 Switch to Option 1</a>
+            <div class="text-right">
+                <span id="step-badge" class="text-[10px] bg-zinc-900 px-2 py-1 rounded text-white font-black tracking-tighter italic">-- STEPS</span>
             </div>
         </div>
+        
+        <nav class="flex overflow-x-auto no-scrollbar border-t border-zinc-100 bg-zinc-50/50">
+            <div id="tab-container" class="flex whitespace-nowrap px-2">
+            </div>
+        </nav>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="px-5 py-8 space-y-10 pb-32">
         
-        <aside class="lg:col-span-3 space-y-2">
-            <h2 class="text-xs font-black text-zinc-400 uppercase mb-4 tracking-widest">Select Itinerary</h2>
-            <div id="day-list" class="space-y-1">
-                </div>
-        </aside>
+        <div id="day-content" class="min-h-[400px]">
+        </div>
 
-        <section class="lg:col-span-6 bg-white rounded-2xl border border-zinc-200 p-6 md:p-8 shadow-xl min-h-[800px]">
-            <div id="itinerary-header" class="mb-10">
-                </div>
-            
-            <div class="relative">
-                <div class="timeline-line"></div>
-                <div id="timeline-container" class="space-y-12">
-                    </div>
+        <section class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
+            <h2 class="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-4">Metabolic Load Analysis</h2>
+            <div class="chart-container">
+                <canvas id="loadChart"></canvas>
             </div>
+            <p class="text-[9px] text-zinc-400 mt-4 text-center italic">Calculated at 4.5 km/h urban pacing</p>
         </section>
-
-        <aside class="lg:col-span-3 space-y-8">
-            <div class="bg-zinc-900 text-white p-6 rounded-2xl shadow-lg">
-                <h3 class="text-orange-500 font-black text-xs uppercase mb-4">Physical Stats</h3>
-                <div class="chart-container">
-                    <canvas id="stepsChart"></canvas>
-                </div>
-                <div class="mt-4 border-t border-zinc-800 pt-4">
-                    <p class="text-[10px] text-zinc-500 font-bold uppercase">Estimated Pace</p>
-                    <p class="text-lg font-black italic">4.5 km/h <span class="text-xs font-normal text-zinc-400">(Architectural Walk)</span></p>
-                </div>
-            </div>
-
-            <div class="bg-orange-50 p-6 rounded-2xl border border-orange-100">
-                <h3 class="text-orange-800 font-black text-xs uppercase mb-4 italic">Banksy Tracker</h3>
-                <p class="text-xs text-orange-700 leading-relaxed mb-4">Street art is ephemeral. The markers in this app target the last known verified coordinates for the April 2026 window.</p>
-                <div id="banksy-detail" class="p-4 bg-white rounded-lg border border-orange-200 shadow-inner">
-                    </div>
-            </div>
-        </aside>
 
     </main>
 
+    <!-- AI Chat Toggle Button -->
+    <button onclick="toggleAIModal()" class="fixed bottom-24 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-50 hover:scale-105 transition-transform">
+        ✨
+    </button>
+
+    <!-- AI Modal -->
+    <div id="ai-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]">
+            <div class="bg-indigo-600 p-4 text-white flex justify-between items-center">
+                <h3 class="font-black italic uppercase tracking-tighter">✨ Arch-Assistant</h3>
+                <button onclick="toggleAIModal()" class="text-xl">×</button>
+            </div>
+            <div id="ai-chat-output" class="flex-1 overflow-y-auto p-4 space-y-4 text-sm text-zinc-700 bg-zinc-50">
+                <p class="italic text-zinc-400">Ask me anything about London's architecture or the landmarks in your manual.</p>
+            </div>
+            <div class="p-4 border-t border-zinc-100 bg-white flex gap-2">
+                <input type="text" id="ai-input" placeholder="How was the Gherkin built?" class="flex-1 bg-zinc-100 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                <button onclick="askAI()" id="ai-send-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-bold text-sm">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de Estado Inferior -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 p-4 px-6 flex justify-between items-center shadow-2xl">
+        <div class="flex flex-col">
+            <span class="text-[9px] font-black text-zinc-400 uppercase">Active Objective</span>
+            <span id="footer-day" class="text-sm font-black text-zinc-900 tracking-tight">Select a day</span>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center font-bold text-zinc-400">↑</button>
+        </div>
+    </div>
+
     <script>
-        const itineraryData = [
-            { day: 1, date: "Sat 18 Apr", steps: 5000, start: "19:00", title: "Arrival & Whiteleys", nodes: [
-                { time: "19:00", act: "Depart Smart Hyde Park Inn", loc: "Smart Hyde Park Inn", walk: "0 min", note: "Drop 40L bag in locker." },
-                { time: "19:15", act: "Survey: Whiteleys Redevelopment", loc: "Whiteleys London", walk: "10 min", note: "Analyse the Foster + Partners luxury conversion." },
-                { time: "20:30", act: "Banksy: The Painter", loc: "Acklam Road Banksy", walk: "20 min", note: "Check the mural under the Westway flyover." }
-            ], banksy: "The Painter (Notting Hill) - Stencil of a painter writing 'Banksy'." },
+        const apiKey = ""; // API Key provides by environment
+        const masterItinerary = [
+            { id: 1, date: "Apr 18", title: "Arrival & Base", steps: 5000, schedule: [
+                { time: "19:00", act: "Check-in: Smart Hyde Park Inn", loc: "Smart Hyde Park Inn London", note: "Setup base at Bayswater. 40L bag to locker." },
+                { time: "19:45", act: "Survey: Whiteleys", loc: "Whiteleys London", note: "Foster + Partners flagship conversion study." },
+                { time: "20:30", act: "Banksy: The Painter", loc: "Acklam Road Banksy", note: "Search for the stencil under the Westway bridge." }
+            ], banksy: "The Painter (Notting Hill) - Stencil of a painter writing 'Banksy' on the wall." },
+            
+            { id: 2, date: "Apr 19", title: "Brutalist Strata", steps: 18000, schedule: [
+                { time: "09:00", act: "Depart: Hike to South Bank", loc: "National Theatre London", note: "Walk through Hyde Park/Green Park (75 min)." },
+                { time: "11:00", act: "Hito: National Theatre", loc: "National Theatre London", note: "Lasdun's concrete layering. Observe board-marked textures." },
+                { time: "14:30", act: "Analysis: Westminster Hall", loc: "Westminster Hall", note: "Medieval perpendicular gothic timber-roof study." },
+                { time: "16:30", act: "Street Art: Leake St", loc: "Leake Street Arches", note: "Legal graffiti sanctuary under the rail lines." }
+            ], banksy: "Leake Street Tunnel - Banksy's 'Cans Festival' site. A dynamic layer of city ink." },
 
-            { day: 2, date: "Sun 19 Apr", steps: 18000, start: "09:00", title: "The Brutalist Walk", nodes: [
-                { time: "09:00", act: "Depart Hostel", loc: "Smart Hyde Park Inn", walk: "0 min", note: "Head SE through Hyde Park." },
-                { time: "10:30", act: "South Bank: National Theatre", loc: "National Theatre London", walk: "70 min", note: "Denys Lasdun's 'Strata' architecture." },
-                { time: "14:00", act: "Westminster Hall", loc: "Westminster Hall", walk: "15 min", note: "Gothic perpendicular analysis." },
-                { time: "16:30", act: "Leake Street Tunnel", loc: "Leake Street Arches", walk: "10 min", note: "The Cans Festival site." }
-            ], banksy: "Leake St Tunnel - Entire underpass is a graffiti sanctuary." },
+            { id: 3, date: "Apr 20", title: "High-Tech Square Mile", steps: 19000, schedule: [
+                { time: "10:00", act: "Hito: Lloyd's of London", loc: "Lloyd's of London", note: "Richard Rogers' Bowellism masterclass." },
+                { time: "13:00", act: "Survey: Garden at 120", loc: "The Garden at 120", note: "Rooftop section analysis. No booking required." },
+                { time: "15:30", act: "Banksy: Beech St Basquiats", loc: "Beech Street Banksy", note: "Two protected murals under the Barbican tunnel." }
+            ], banksy: "Basquiat Murals - Criticizing art commodification. Protected by glass." },
 
-            { day: 3, date: "Mon 20 Apr", steps: 19000, start: "09:30", title: "High-Tech Steel", nodes: [
-                { time: "09:30", act: "Depart Hostel", loc: "Smart Hyde Park Inn", walk: "0 min", note: "Take Central Line or walk 90min." },
-                { time: "11:00", act: "The City: Lloyd's & Gherkin", loc: "Lloyd's of London", walk: "5 min", note: "Richard Rogers' Bowellism vs Foster's Diagrid." },
-                { time: "14:00", act: "Garden at 120", loc: "The Garden at 120", walk: "5 min", note: "Open-air rooftop. No booking needed." },
-                { time: "16:00", act: "Banksy: Basquiat Murals", loc: "Beech Street Banksy", walk: "15 min", note: "Protected under Barbican tunnel." }
-            ], banksy: "Basquiat Tributes - Two murals satirizing the police and art market." },
+            { id: 4, date: "Apr 21", title: "Brighton Coastal", steps: 20000, schedule: [
+                { time: "08:15", act: "Depart: Walk to Victoria", loc: "Victoria Station London", note: "45-min morning brisk walk to station." },
+                { time: "11:00", act: "Hito: Royal Pavilion", loc: "Royal Pavilion Brighton", note: "Nash's Indo-Saracenic iron engineering." },
+                { time: "15:00", act: "Analysis: i360 Tower", loc: "British Airways i360", note: "Vertical urban esplanade by Marks Barfield." }
+            ], banksy: "Kissing Policemen Site - Replica on the side of the Prince Albert Pub (Frederick St)." },
 
-            { day: 4, date: "Tue 21 Apr", steps: 20000, start: "08:15", title: "Coastal Brighton", nodes: [
-                { time: "08:15", act: "Head to Victoria Station", loc: "Victoria Station London", walk: "45 min", note: "Walk through Hyde Park." },
-                { time: "09:30", act: "Train to Brighton", loc: "Brighton Station", walk: "60 min train", note: "Use Trainline App." },
-                { time: "11:00", act: "Royal Pavilion", loc: "Royal Pavilion Brighton", walk: "10 min", note: "Nash's Indo-Saracenic masterpiece." },
-                { time: "15:00", act: "Banksy: Kissing Policemen Site", loc: "Prince Albert Brighton Banksy", walk: "15 min", note: "Replica at the original pub location." }
-            ], banksy: "Kissing Policemen - Iconic piece located on the side of a pub." },
+            { id: 5, date: "Apr 22", title: "Palladian Geometry", steps: 16000, schedule: [
+                { time: "10:30", act: "Arrive: Paddington Station", loc: "Paddington Station", note: "15-min walk from hostel to catch GWR train." },
+                { time: "14:30", act: "Roman Baths (BOOKED)", loc: "Roman Baths Bath", note: "Strict entry time. Analysis of ancient hydraulics." },
+                { time: "17:00", act: "Hito: The Royal Crescent", loc: "The Royal Crescent Bath", note: "The Circus & Crescent urban planning study." }
+            ], banksy: "Stone Textures - Zero graffiti in UNESCO zone. Analyze Oolitic Limestone aging." },
 
-            { day: 5, date: "Wed 22 Apr", steps: 16000, start: "09:45", title: "Palladian Bath", nodes: [
-                { time: "10:30", act: "Arrive Paddington Station", loc: "Paddington Station", walk: "15 min", note: "Check track for 11:00 train." },
-                { time: "12:20", act: "Arrive Bath Spa", loc: "Bath Spa Station", walk: "80 min train", note: "Walk North to The Circus." },
-                { time: "14:30", act: "Roman Baths Entry", loc: "Roman Baths Bath", walk: "15 min", note: "Engineering/Hydraulics study." },
-                { time: "19:10", act: "Return Train", loc: "Bath Spa Station", walk: "15 min", note: "Sunset views of the Crescent." }
-            ], banksy: "UNESCO Zone - Clean walls. Focus on stone textures (Oolitic Limestone)." },
+            { id: 6, date: "Apr 23", title: "Industrial King's X", steps: 17000, schedule: [
+                { time: "10:00", act: "Survey: King's X Canopy", loc: "King's Cross Station", note: "McAslan's steel canopy integration study." },
+                { time: "14:00", act: "Hito: Coal Drops Yard", loc: "Coal Drops Yard", note: "Heatherwick's slate roof 'kissing' nodes." },
+                { time: "16:30", act: "Walk: Regent's Canal", loc: "Camden Market", note: "Industrial towpath archaeology walk." }
+            ], banksy: "Camden Canal - Historic graffiti nodes. Check under railway overpasses." },
 
-            { day: 6, date: "Thu 23 Apr", steps: 17000, start: "09:00", title: "Heatherwick's King's X", nodes: [
-                { time: "10:00", act: "King's X Lattice Roof", loc: "King's Cross Station", walk: "60 min", note: "John McAslan's steel canopy." },
-                { time: "14:00", act: "Coal Drops Yard", loc: "Coal Drops Yard", walk: "5 min", note: "Heatherwick's 'Kissing' roofs." },
-                { time: "16:00", act: "Regent's Canal Walk", loc: "Camden Market", walk: "30 min", note: "Urban towpath exploration." }
-            ], banksy: "Camden Canal - Look for remnants under the Bridges." },
+            { id: 7, date: "Apr 24", title: "Greenwich Maritime", steps: 19000, schedule: [
+                { time: "10:00", act: "Hito: Old Naval College", loc: "Old Royal Naval College", note: "Christopher Wren's Baroque symmetry." },
+                { time: "13:30", act: "Engineering: Foot Tunnel", loc: "Greenwich Foot Tunnel", note: "1902 cast-iron under-river engineering." },
+                { time: "15:30", act: "Survey: Canary Wharf", loc: "Canary Wharf", note: "The Pelli/Foster corporate verticality study." }
+            ], banksy: "Docklands - Search for small stencils/remnants on industrial pillars." },
 
-            { day: 7, date: "Fri 24 Apr", steps: 19000, start: "09:00", title: "Greenwich to Canary", nodes: [
-                { time: "10:30", act: "Greenwich Naval College", loc: "Old Royal Naval College", walk: "90 min", note: "Wren's symmetrical masterpiece." },
-                { time: "14:00", act: "Foot Tunnel", loc: "Greenwich Foot Tunnel", walk: "10 min", note: "1902 iron-lined tunnel under Thames." },
-                { time: "15:30", act: "Canary Wharf Skyscrapers", loc: "Canary Wharf", walk: "20 min", note: "SOM, Foster, and Pelli corporate hub." }
-            ], banksy: "Dockland Remnants - Check pillar bases near West India Quay." },
+            { id: 8, date: "Apr 25", title: "The Museum Protocol", steps: 20000, schedule: [
+                { time: "08:45", act: "Depart: Walk to Holborn", loc: "Sir John Soane's Museum", note: "65-min transit walk across central London." },
+                { time: "10:00", act: "Soane Museum (BOOKED)", loc: "Sir John Soane's Museum", note: "Complex section & light analysis." },
+                { time: "12:30", act: "British Museum (BOOKED)", loc: "British Museum", note: "Foster's Great Court roof nodes analysis." },
+                { time: "16:00", act: "Banksy: Shoreditch Loop", loc: "Rivington Street Banksy", note: "Guard Dog & Yellow Flower pieces." }
+            ], banksy: "Guard Dog & Yellow Flower - Essential Shoreditch street art staples." },
 
-            { day: 8, date: "Sat 25 Apr", steps: 20000, start: "08:45", title: "The Soane/British Combo", nodes: [
-                { time: "10:00", act: "Sir John Soane's (BOOKED)", loc: "Sir John Soane's Museum", walk: "60 min", note: "Zenithal light study." },
-                { time: "12:30", act: "British Museum (BOOKED)", loc: "British Museum", walk: "10 min", note: "Foster's Great Court analysis." },
-                { time: "15:30", act: "Shoreditch Banksy Trail", loc: "Rivington Street Banksy", walk: "45 min", note: "Guard Dog & Yellow Flower." }
-            ], banksy: "Guard Dog & Yellow Flower - Essential Shoreditch stencils." },
+            { id: 9, date: "Apr 26", title: "Marathon & Sky Garden", steps: 15000, schedule: [
+                { time: "10:00", act: "Battersea Power Station", loc: "Battersea Power Station", note: "Stay West to avoid Marathon crowds. Brick survey." },
+                { time: "15:30", act: "River: Uber Boat Transit", loc: "Tower Pier London", note: "Avoid the Tube. Take boat to Tower Pier." },
+                { time: "17:00", act: "Sky Garden (BOOKED)", loc: "Sky Garden London", note: "Golden Hour sunset engineering study." }
+            ], banksy: "Sky Garden - The shadows of the structure at 17:00 are unmatched." },
 
-            { day: 9, date: "Sun 26 Apr", steps: 15000, start: "07:15", title: "The Sky Garden Hack", nodes: [
-                { time: "07:15", act: "Depart for Breakfast Hack", loc: "Sky Garden London", walk: "90 min", note: "Early departure to avoid Marathon crowds." },
-                { time: "08:30", act: "Darwin Brasserie Breakfast", loc: "Sky Garden", walk: "0 min", note: "Booking required. Entry via Restaurant." },
-                { time: "11:30", act: "Battersea Power Station", loc: "Battersea Power Station", walk: "60 min", note: "Stay West to avoid Marathon finish." },
-                { time: "17:00", act: "Sky Garden Sunset (TICKET)", loc: "Sky Garden", walk: "Via Tube", note: "Enter via main ticket for Golden Hour." }
-            ], banksy: "Sunset Analysis - The iron/glass shadows at 17:00 are unmatched." },
-
-            { day: 10, date: "Mon 27 Apr", steps: 12000, start: "09:30", title: "Bankside Finale", nodes: [
-                { time: "10:30", act: "Tate Modern (Switch House)", loc: "Tate Modern", walk: "60 min", note: "Herzog & de Meuron brickwork." },
-                { time: "13:30", act: "Borough Market", loc: "Borough Market", walk: "10 min", note: "Piano's Shard looming above." },
-                { time: "16:00", act: "Head to Paddington", loc: "Paddington Station", walk: "60 min", note: "Airport transfer via Elizabeth Line." }
-            ], banksy: "Southwark Bridge - Check underpasses near the river bank." }
+            { id: 10, date: "Apr 27", title: "Bankside Farewell", steps: 12000, schedule: [
+                { time: "10:00", act: "Hito: Tate Modern", loc: "Tate Modern", note: "Herzog & de Meuron brickwork extension." },
+                { time: "13:30", act: "Survey: Borough Market", loc: "Borough Market", note: "Renzo Piano's Shard looming above." },
+                { time: "15:30", act: "Final: Paddington", loc: "Paddington Station", note: "Elizabeth Line transfer to Airport." }
+            ], banksy: "Southwark Bridge - Search underpasses for river-themed stencils." }
         ];
 
-        let stepsChartInstance;
+        let loadChart;
+        let selectedDayId = 1;
+
+        async function geminiFetch(prompt, systemPrompt = "You are an expert London architect.") {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (e) {
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+            return "Error calling Gemini. Check connection.";
+        }
+
+        function toggleAIModal() {
+            const modal = document.getElementById('ai-modal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        async function askAI() {
+            const input = document.getElementById('ai-input');
+            const chat = document.getElementById('ai-chat-output');
+            const question = input.value.trim();
+            if (!question) return;
+
+            appendChatMessage('user', question);
+            input.value = '';
+            
+            const loaderId = appendChatMessage('ai', '<div class="loader"></div>');
+            const response = await geminiFetch(question);
+            updateChatMessage(loaderId, response);
+        }
+
+        function appendChatMessage(role, text) {
+            const chat = document.getElementById('ai-chat-output');
+            const id = 'msg-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = role === 'user' ? 'bg-indigo-100 p-3 rounded-lg ml-8' : 'bg-white p-3 rounded-lg mr-8 shadow-sm border border-zinc-100';
+            div.innerHTML = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+            return id;
+        }
+
+        function updateChatMessage(id, text) {
+            const msg = document.getElementById(id);
+            if (msg) msg.innerHTML = text;
+            const chat = document.getElementById('ai-chat-output');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function generateSketchPrompt(landmark) {
+            const content = document.getElementById('day-content');
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loader"></div>';
+            
+            const prompt = `Give me a short, inspiring urban sketching prompt for an architect visiting ${landmark} in London. Focus on textures, perspective, and lighting.`;
+            const response = await geminiFetch(prompt, "You are a professional architectural illustrator.");
+            
+            btn.innerHTML = originalText;
+            const detail = document.createElement('div');
+            detail.className = "bg-indigo-50 p-4 rounded-xl mt-4 text-xs italic border border-indigo-100 animate-in slide-in-from-top duration-300";
+            detail.innerHTML = `<strong>✨ Sketch Idea:</strong> ${response}`;
+            btn.parentElement.appendChild(detail);
+        }
+
+        async function deepDiveBanksy(banksyInfo) {
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="loader"></div>';
+
+            const prompt = `Explain the sociopolitical context and meaning of this Banksy work: ${banksyInfo}. Keep it brief but insightful for an architect.`;
+            const response = await geminiFetch(prompt, "You are a London art critic and historian.");
+            
+            btn.innerHTML = originalText;
+            const detail = document.createElement('div');
+            detail.className = "bg-rose-900/20 p-4 rounded-xl mt-4 text-xs italic border border-rose-900/30 text-white animate-in slide-in-from-top duration-300";
+            detail.innerHTML = `<strong>✨ Deep Dive:</strong> ${response}`;
+            btn.parentElement.appendChild(detail);
+        }
 
         function init() {
-            renderDaySelect();
+            renderTabs();
             renderChart();
-            showDay(9); // Default to the Hack Day
+            selectDay(1);
         }
 
-        function renderDaySelect() {
-            const container = document.getElementById('day-list');
-            itineraryData.forEach(d => {
-                const div = document.createElement('div');
-                div.id = `nav-day-${d.day}`;
-                div.className = "p-4 cursor-pointer hover:bg-zinc-100 rounded-lg transition-all border border-transparent flex justify-between items-center";
-                div.onclick = () => showDay(d.day);
-                div.innerHTML = `
-                    <div>
-                        <p class="text-[10px] font-black text-zinc-400 uppercase">Day 0${d.day}</p>
-                        <p class="text-sm font-bold text-zinc-800">${d.title}</p>
-                    </div>
-                    <span class="text-[10px] bg-zinc-100 text-zinc-500 px-2 py-1 rounded font-bold">${d.date}</span>
-                `;
-                container.appendChild(div);
+        function renderTabs() {
+            const container = document.getElementById('tab-container');
+            masterItinerary.forEach(d => {
+                const b = document.createElement('button');
+                b.id = `tab-${d.id}`;
+                b.className = "px-6 py-4 text-[10px] font-black uppercase tracking-tighter transition-all opacity-40";
+                b.innerText = `Day 0${d.id}`;
+                b.onclick = () => selectDay(d.id);
+                container.appendChild(b);
             });
-        }
-
-        function showDay(dayId) {
-            const data = itineraryData.find(d => d.day === dayId);
-            
-            // UI Toggle
-            itineraryData.forEach(d => document.getElementById(`nav-day-${d.day}`).classList.remove('active-day'));
-            document.getElementById(`nav-day-${dayId}`).classList.add('active-day');
-
-            // Header
-            document.getElementById('itinerary-header').innerHTML = `
-                <div class="flex items-center gap-3 mb-2">
-                    <span class="bg-orange-600 text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-tighter">Plan Option 2</span>
-                    <span class="text-zinc-400 text-xs font-bold">${data.date}</span>
-                </div>
-                <h2 class="text-4xl font-black text-zinc-900 tracking-tighter leading-none">${data.title}</h2>
-                <p class="text-zinc-500 text-sm mt-2">Walking departure from Hostel at <strong>${data.start}</strong></p>
-            `;
-
-            // Timeline
-            const container = document.getElementById('timeline-container');
-            container.innerHTML = '';
-            data.nodes.forEach((node, idx) => {
-                const item = document.createElement('div');
-                item.className = "flex gap-6 animate-ui";
-                item.innerHTML = `
-                    <div class="step-node">${idx + 1}</div>
-                    <div class="flex-1 pb-2">
-                        <div class="flex justify-between items-start">
-                            <h4 class="font-black text-lg text-zinc-800 leading-tight">${node.act}</h4>
-                            <span class="text-[10px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded">${node.time}</span>
-                        </div>
-                        <p class="text-xs text-zinc-500 mt-1 mb-3">🚶 Est. Walk: ${node.walk} • ${node.note}</p>
-                        <a href="http://googleusercontent.com/maps.google.com/88{encodeURIComponent(node.loc)}" target="_blank" class="map-btn">
-                            🗺️ Navigate: ${node.loc}
-                        </a>
-                    </div>
-                `;
-                container.appendChild(item);
-            });
-
-            // Banksy
-            document.getElementById('banksy-detail').innerHTML = `<p class="text-xs font-medium text-orange-900">“${data.banksy}”</p>`;
-
-            // Update Chart Colors
-            stepsChartInstance.data.datasets[0].backgroundColor = itineraryData.map(d => d.day === dayId ? '#ea580c' : '#e4e4e7');
-            stepsChartInstance.update();
-            
-            // Scroll to center for mobile
-            if(window.innerWidth < 1024) {
-                document.getElementById('itinerary-header').scrollIntoView({ behavior: 'smooth' });
-            }
         }
 
         function renderChart() {
-            const ctx = document.getElementById('stepsChart').getContext('2d');
-            stepsChartInstance = new Chart(ctx, {
+            const ctx = document.getElementById('loadChart').getContext('2d');
+            loadChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: itineraryData.map(d => `D${d.day}`),
+                    labels: masterItinerary.map(d => `D${d.id}`),
                     datasets: [{
-                        data: itineraryData.map(d => d.steps),
-                        backgroundColor: itineraryData.map(d => '#e4e4e7'),
+                        data: masterItinerary.map(d => d.steps),
+                        backgroundColor: '#e4e4e7',
+                        hoverBackgroundColor: '#e11d48',
                         borderRadius: 4
                     }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false, beginAtZero: true }
-                    },
-                    onClick: (e, active) => {
-                        if (active.length > 0) showDay(itineraryData[active[0].index].day);
+                    scales: { 
+                        x: { display: false }, 
+                        y: { display: false, beginAtZero: true } 
                     }
                 }
             });
+        }
+
+        function selectDay(id) {
+            selectedDayId = id;
+            const data = masterItinerary.find(d => d.id === id);
+            
+            masterItinerary.forEach(d => document.getElementById(`tab-${d.id}`).className = "px-6 py-4 text-[10px] font-black uppercase tracking-tighter transition-all opacity-40");
+            const active = document.getElementById(`tab-${id}`);
+            active.className = "px-6 py-4 text-[10px] font-black uppercase tracking-tighter transition-all active-tab";
+            active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+            document.getElementById('step-badge').innerText = `${data.steps.toLocaleString()} STEPS`;
+            document.getElementById('footer-day').innerText = `${data.id}. ${data.title}`;
+
+            const content = document.getElementById('day-content');
+            content.innerHTML = `
+                <div class="mb-10">
+                    <h3 class="text-4xl font-black text-zinc-900 leading-none tracking-tighter mb-2">${data.title}</h3>
+                    <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">${data.date} • ARCHITECTURAL PROTOCOL</p>
+                </div>
+
+                <div class="space-y-2">
+                    ${data.schedule.map((node, index) => `
+                        <div class="timeline-item">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded uppercase tracking-widest">${node.time}</span>
+                                <span class="text-[8px] font-bold text-zinc-300 uppercase">Sequence 0${index + 1}</span>
+                            </div>
+                            <h4 class="font-black text-zinc-800 text-lg leading-tight mb-1">${node.act}</h4>
+                            <p class="text-xs text-zinc-500 mb-2 leading-relaxed">${node.note}</p>
+                            <div class="flex flex-col gap-2">
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(node.loc)}" 
+                                   target="_blank" class="map-btn">
+                                   📍 GPS Walk Navigation
+                                </a>
+                                <button onclick="generateSketchPrompt('${node.loc}')" class="ai-btn">
+                                   ✨ Sketching Idea
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="banksy-box shadow-xl">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-1.5 h-6 bg-rose-600"></div>
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">Street Art Hito</span>
+                    </div>
+                    <p class="text-sm font-medium italic text-zinc-300 leading-relaxed mb-4">"${data.banksy}"</p>
+                    <button onclick="deepDiveBanksy('${data.banksy}')" class="ai-btn bg-white/10 hover:bg-white/20 border border-white/20">
+                       ✨ Deep Dive Analysis
+                    </button>
+                </div>
+            `;
+
+            loadChart.data.datasets[0].backgroundColor = masterItinerary.map(d => d.id === id ? '#e11d48' : '#e4e4e7');
+            loadChart.update();
         }
 
         window.onload = init;
