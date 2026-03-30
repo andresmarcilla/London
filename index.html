@@ -26,9 +26,10 @@
             width: 12px; height: 12px; background: white;
             border: 2px solid #18181b; border-radius: 50%;
         }
-        .arch-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e4e4e7; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .arch-card { background: white; border-radius: 16px; padding: 16px; border: 1px solid #e4e4e7; margin-top: 12px; }
         .banksy-box { background: #18181b; color: #f4f4f5; border-radius: 16px; padding: 20px; border-left: 6px solid #e11d48; margin-top: 20px; }
-        .section-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; margin-bottom: 4px; display: block; }
+        .section-label { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #a1a1aa; margin-bottom: 2px; display: block; }
+        .departure-tag { font-size: 0.7rem; font-weight: 800; color: #e11d48; background: #fff1f2; padding: 2px 8px; border-radius: 99px; }
     </style>
 </head>
 <body class="antialiased">
@@ -71,123 +72,271 @@
     <script>
         const masterItinerary = [
             { id: 1, date: "Apr 18", title: "Adaptive Reuse: Bayswater", steps: 5000, 
-              analysis: {
-                target: "Whiteleys London",
-                cosmovision: "The 'Second Life' of heritage. It represents the transformation of 20th-century department stores into 21st-century vertical luxury communities.",
-                driver: "The collapse of traditional retail and the need for high-density, mixed-use luxury housing in central London.",
-                aesthetics: "Foster + Partners' signature: Preserving the 1911 Grade II facade while inserting a modern, light-filled internal structure with high-end glass and timber finishes."
-              },
               schedule: [
-                { time: "19:00", act: "Check-in: Smart Hyde Park Inn", loc: "Smart Hyde Park Inn London", note: "Setup base." },
-                { time: "19:45", act: "Survey: Whiteleys", loc: "Whiteleys London", note: "Adaptive reuse study." }
+                { 
+                  time: "19:00", 
+                  departure: "18:50 (From Hostel)",
+                  act: "Check-in: Smart Hyde Park Inn", 
+                  loc: "Smart Hyde Park Inn London", 
+                  note: "Setup base.",
+                  analysis: {
+                    cosmovision: "This site embodies the concept of the 'Urban Micro-Cell'. It explores how dense Victorian domestic architecture can be surgically adapted to serve as a node for global, low-budget nomadic flow. It is architecture as a functional transit point rather than a permanent destination.",
+                    driver: "The driving force is the intersection of urban real-estate pressure and the democratization of international travel. The conversion focuses on maximum partitioning efficiency within a legacy shell, balancing heritage preservation with the logistics of high-turnover occupancy.",
+                    aesthetics: "A classic Stucco-fronted terrace that masks a hyper-rationalized internal layout. The aesthetics are defined by the contrast between the generous, high-ceilinged Victorian 'grandeur' of the facade and the compressed, utilitarian ergonomics of modern hostel spatial planning."
+                  }
+                },
+                { 
+                  time: "19:45", 
+                  departure: "19:35",
+                  act: "Survey: Whiteleys", 
+                  loc: "Whiteleys London", 
+                  note: "Adaptive reuse study.",
+                  analysis: {
+                    cosmovision: "Foster + Partners propose the 'Second Life' of heritage. The building is treated as an architectural palimpsest where the courtyard acts as a lung, breathing modern light into a fossilized retail shell. It represents the shift from 'Cathedrals of Commerce' to integrated 'Luxury Ecosystems'.",
+                    driver: "Driven by the collapse of the 20th-century department store model. The project responds to the urgent need to reclaim massive urban voids for high-density, mixed-use luxury housing, ensuring that historic landmarks remain relevant in a post-retail economy.",
+                    aesthetics: "A dramatic internal insertion of high-tech glass, timber, and steel into the 1911 Grade II neoclassical facade. The aesthetic tension lies in the dialogue between the heavy Portland stone shell and the lightweight, transparent structural interventions of the new central atrium."
+                  }
+                }
               ], banksy: "The Painter (Notting Hill) - Stencil of a painter writing 'Banksy' on the wall." },
             
             { id: 2, date: "Apr 19", title: "Brutalist Urbanism", steps: 18000, 
-              analysis: {
-                target: "National Theatre",
-                cosmovision: "Architecture as 'Urban Strata'. Denys Lasdun conceived the building as a man-made geological formation that extends the city sidewalks into terraces.",
-                driver: "Post-war cultural reconstruction. The need for a secular temple for the arts that rejected bourgeois ornamentation.",
-                aesthetics: "Brutalist. Board-marked concrete (showing wood grain), sharp interlocking volumes, and the rejection of a singular front facade."
-              },
               schedule: [
-                { time: "11:00", act: "Hito: National Theatre", loc: "National Theatre London", note: "Concrete layering study." },
-                { time: "14:30", act: "Analysis: Westminster Hall", loc: "Westminster Hall", note: "Perpendicular Gothic study." }
+                { 
+                  time: "11:00", 
+                  departure: "09:45 (From Hostel)",
+                  act: "Hito: National Theatre", 
+                  loc: "National Theatre London", 
+                  note: "Concrete layering study.",
+                  analysis: {
+                    cosmovision: "Denys Lasdun conceived this as 'Urban Strata'. Architecture is seen as a man-made geological formation, an extension of the river’s edge that invites the public to move vertically through the city. The 'fourth wall' of the theater is the South Bank itself.",
+                    driver: "A post-war social democratic mission to build secular temples for the arts. The goal was to reject the elitism of the West End by creating an 'open landscape' where structural guts are exposed and balconies act as public sidewalks for all citizens.",
+                    aesthetics: "The ultimate 'Béton Brut'. Its beauty lies in the board-marked concrete textures that mirror wood grain, the sharp interplay of interlocking horizontal volumes, and the deep, cinematic shadows cast by its overhanging terraces against the London sky."
+                  }
+                },
+                { 
+                  time: "14:30", 
+                  departure: "14:10",
+                  act: "Analysis: Westminster Hall", 
+                  loc: "Westminster Hall", 
+                  note: "Perpendicular Gothic study.",
+                  analysis: {
+                    cosmovision: "Architecture as a manifestation of Divine and Royal Authority. The hall is a sacred vessel for the law, designed to survive centuries as the heavy physical heart of the British State. It represents the meeting point of medieval engineering and sacred geometry.",
+                    driver: "The necessity for a colossal, unencumbered space to house royal banquets and law courts. Richard II’s master carpenter, Hugh Herland, was driven to create the largest clear-span roof in Europe without the need for intrusive central support columns.",
+                    aesthetics: "The Perpendicular Gothic style at its peak. The aesthetic triumph is the Hammerbeam roof (1393)—a complex forest of carved oak arches that create a sense of weightlessness, turning a massive stone enclosure into a celestial, airy administrative cathedral."
+                  }
+                }
               ], banksy: "Leake Street Tunnel - Banksy's 'Cans Festival' site. A dynamic layer of city ink." },
 
             { id: 3, date: "Apr 20", title: "High-Tech Corporate", steps: 19000, 
-              analysis: {
-                target: "Lloyd's Building",
-                cosmovision: "Bowellism / Inside-Out. The building is a machine that prioritizes serviceability; the internal space is a cathedral of light completely free of obstructions.",
-                driver: "The 1980s Big Bang in finance. Lloyd's needed a flexible space that could be easily maintained without disrupting global insurance trade.",
-                aesthetics: "High-Tech. Stainless steel ducts, glass elevators, and external staircases creating a hyper-industrial, restless exterior silhouette."
-              },
               schedule: [
-                { time: "10:00", act: "Hito: Lloyd's of London", loc: "Lloyd's of London", note: "Rogers' masterclass." },
-                { time: "13:00", act: "Survey: Garden at 120", loc: "The Garden at 120", note: "Rooftop section analysis." }
+                { 
+                  time: "10:00", 
+                  departure: "08:30 (From Hostel)",
+                  act: "Hito: Lloyd's of London", 
+                  loc: "Lloyd's of London", 
+                  note: "Rogers' masterclass.",
+                  analysis: {
+                    cosmovision: "The 'Inside-Out' philosophy. Richard Rogers viewed the building as a living mechanical organism. By moving services to the exterior, the interior is liberated as a pure 'Cathedral of Light', free of structural obstructions to allow for total organizational evolution.",
+                    driver: "The insurance market's requirement for a singular, unencumbered trading floor ('The Room'). The building had to be serviceable without disrupting the 24/7 flow of global finance, leading to the externalization of ducts, lifts, and toilets for easy maintenance.",
+                    aesthetics: "A gleaming high-tech exoskeleton of stainless steel and blue-tinted glass. The aesthetic is hyper-industrial and restless, celebrated through exposed plumbing, external glass elevators, and the visible rhythm of its modular service pods and structural lattice."
+                  }
+                },
+                { 
+                  time: "13:00", 
+                  departure: "12:50",
+                  act: "Survey: Garden at 120", 
+                  loc: "The Garden at 120", 
+                  note: "Rooftop section analysis.",
+                  analysis: {
+                    cosmovision: "The 'Democratization of the Horizon'. This space challenges the corporate privatization of the London skyline by offering a free, accessible public park at 15 stories. It reclaims the roof as a new 'ground level' for the modern urban dweller.",
+                    driver: "Driven by City of London planning policies (Section 106) that mandate developers to provide significant public amenities and green space in exchange for high-density skyscraper permits in the increasingly congested and vertically-expanding Square Mile.",
+                    aesthetics: "A soft horticultural landscape meeting rigid financial steel. The aesthetics are defined by the timber wisteria pergolas and water features that frame brutal, close-up reflections of the nearby Gherkin and Scalpel towers, blending organic softness with corporate tectonic power."
+                  }
+                }
               ], banksy: "Basquiat Murals - Satire under the Barbican tunnel. Protected by glass." },
 
             { id: 4, date: "Apr 21", title: "Indo-Saracenic Escapism", steps: 20000, 
-              analysis: {
-                target: "Royal Pavilion Brighton",
-                cosmovision: "Orientalist Fantasy. An architectural 'mask' that allowed the British elite to play with the aesthetic of an empire they were still colonizing.",
-                driver: "The Prince Regent's desire for a pleasure palace away from the rigid formalities of London court life.",
-                aesthetics: "Indo-Saracenic. Cast-iron frames supporting onion domes, minarets, and a Chinese-inspired interior 'Chinoiserie' that defies logic."
-              },
               schedule: [
-                { time: "11:00", act: "Hito: Royal Pavilion", loc: "Royal Pavilion Brighton", note: "Nash's engineering." },
-                { time: "15:00", act: "Analysis: i360 Tower", loc: "British Airways i360", note: "Vertical urbanism." }
+                { 
+                  time: "11:00", 
+                  departure: "07:30 (Hostel to Victoria Station)",
+                  act: "Hito: Royal Pavilion", 
+                  loc: "Royal Pavilion Brighton", 
+                  note: "Nash's engineering.",
+                  analysis: {
+                    cosmovision: "Architecture as a 'Mask' of Orientalist Fantasy. John Nash designed this to be a psychological escape for the monarchy, a place where the rigid etiquette of the London court could be discarded for a scenic, theatrical version of an idealized East.",
+                    driver: "The hedonistic desires of the Prince Regent and the dawn of the 'Coastal Resort' era. The construction was accelerated by the arrival of the railway, which turned Brighton from a fishing village into a playground for the elite seeking exotic stimulation.",
+                    aesthetics: "A riot of Indo-Islamic onion domes and minarets that cleverly conceal a pioneering cast-iron structural frame. The aesthetic is pure 'Chinoiserie'—a dizzying blend of Chinese wallpaper, bamboo effects, and dragon motifs that defies classical Western proportion."
+                  }
+                }
               ], banksy: "Kissing Policemen Site - Replica on Frederick St." },
 
             { id: 5, date: "Apr 22", title: "Palladian Order", steps: 16000, 
-              analysis: {
-                target: "The Royal Crescent",
-                cosmovision: "The Enlightenment in Stone. Urbanism that seeks to tame the landscape through rigid symmetry and the application of classical Roman orders to housing.",
-                driver: "The rise of Bath as a healing spa destination for the aristocracy, requiring housing that mirrored their social status.",
-                aesthetics: "Palladian. Oolitic limestone (Bath Stone), Ionical columns, and a repetitive rhythm that creates a sense of infinite monumentality."
-              },
               schedule: [
-                { time: "14:30", act: "Roman Baths (BOOKED)", loc: "Roman Baths Bath", note: "Ancient hydraulics." },
-                { time: "17:00", act: "Hito: Royal Crescent", loc: "The Royal Crescent Bath", note: "Urban planning study." }
+                { 
+                  time: "14:30", 
+                  departure: "10:15 (Hostel to Paddington Station)",
+                  act: "Roman Baths (BOOKED)", 
+                  loc: "Roman Baths Bath", 
+                  note: "Ancient hydraulics.",
+                  analysis: {
+                    cosmovision: "The Intersection of Water and Divinity. The Romans viewed this as a 'Liminal Space' where hydrothermal engineering met the cult of Sulis-Minerva. It is architecture as a bridge between physical hygiene and spiritual purification.",
+                    driver: "The Roman colonial policy of 'Romanization' through infrastructure. The construction of a grand bathing complex served to pacify the province by providing a sophisticated social hub that mirrored the comforts and technological superiority of the heart of the Empire.",
+                    aesthetics: "A rich stratigraphy of time. The aesthetics are defined by heavy lead-lined pools, steaming mineral water, and the layering of Roman masonry under medieval vaults and 19th-century neoclassical terraces, all executed in the iconic honey-colored oolitic limestone."
+                  }
+                },
+                { 
+                  time: "17:00", 
+                  departure: "16:45",
+                  act: "Hito: Royal Crescent", 
+                  loc: "The Royal Crescent Bath", 
+                  note: "Urban planning study.",
+                  analysis: {
+                    cosmovision: "The 'Enlightenment in Stone'. John Wood the Younger sought to impose an ordered, mathematical sequence onto the organic British landscape. The crescent is a manifestation of the belief that nature should be tamed through the application of rigid, classical Roman geometry.",
+                    driver: "The 18th-century housing boom for the aristocracy. The driver was speculative real estate aimed at a class of people who wanted to live in a 'Country House' but within the social convenience of a city, requiring a facade that looked like a singular, monumental palace.",
+                    aesthetics: "Palladian harmony at its grandest scale. The aesthetic is a repetitive, hypnotic rhythm of 114 Ionic columns forming a continuous 500-foot sweep. The golden Bath Stone glows under the setting sun, emphasizing the hypnotic symmetry and the vast, open lawn it frames."
+                  }
+                }
               ], banksy: "Zero graffiti in UNESCO zone. Analyze limestone aging." },
 
             { id: 6, date: "Apr 23", title: "Industrial Synthesis", steps: 17000, 
-              analysis: {
-                target: "Coal Drops Yard",
-                cosmovision: "The 'Kissing' point. Heatherwick's approach was to bridge two distinct Victorian structures with a third, fluid modern element to create a heart for King's Cross.",
-                driver: "The massive King's Cross regeneration project aiming to turn derelict rail lands into a tech and education hub (Google/CSM).",
-                aesthetics: "Industrial/Modern. Slate roofs curved into fluid shapes, black steel columns, and granite paving that echoes the site's rail history."
-              },
               schedule: [
-                { time: "10:00", act: "Survey: King's X Canopy", loc: "King's Cross Station", note: "McAslan's steel canopy." },
-                { time: "14:00", act: "Hito: Coal Drops Yard", loc: "Coal Drops Yard", note: "Heatherwick's kiss." }
+                { 
+                  time: "10:00", 
+                  departure: "09:00 (From Hostel)",
+                  act: "Survey: King's X Canopy", 
+                  loc: "King's Cross Station", 
+                  note: "McAslan's steel canopy.",
+                  analysis: {
+                    cosmovision: "Flow as the Primary Architect. The canopy represents the modern 'Transit Gateway', transforming a Victorian bottleneck into a fluid space of movement where the old brick station is respected but dynamically augmented for the hyper-mobile age.",
+                    driver: "The $500m King's Cross regeneration masterplan. The project was driven by the need to integrate the station with the new 'Knowledge Quarter' (Google, Central Saint Martins) and to handle massive increases in passenger numbers from the new Eurostar link.",
+                    aesthetics: "A semicircular steel 'fan-vault' consisting of a single, central 'Tree' of columns that branches out into a complex tessellated roof. The aesthetic is defined by white steel lattice, indirect lighting, and a feeling of weightless buoyancy that contrasts with the heavy Victorian masonry."
+                  }
+                },
+                { 
+                  time: "14:00", 
+                  departure: "13:50",
+                  act: "Hito: Coal Drops Yard", 
+                  loc: "Coal Drops Yard", 
+                  note: "Heatherwick's kiss.",
+                  analysis: {
+                    cosmovision: "The 'Spatial Kiss'. Thomas Heatherwick rejected the traditional retail box, viewing the project as a merger of two distinct histories into a singular modern heart. It is architecture as a connective tissue that bridges the industrial past with the retail future.",
+                    driver: "Reclaiming derelict industrial rail lands that were used for coal storage. The project was driven by the desire to create a high-end social and retail destination north of the Regent's Canal to drive footfall into the heart of the new redevelopment zone.",
+                    aesthetics: "The aesthetic centerpiece is the pair of fluid, slate-covered roofs that peel upwards like wings to meet in mid-air. This is framed by black steel pillars, granite paving that echoes rail tracks, and the rough, tactile materiality of Victorian London brickwork."
+                  }
+                }
               ], banksy: "Historic graffiti nodes under railway overpasses." },
 
-            { id: 7, date: "Apr 24", title: "Baroque Maritime Power", steps: 19000, 
-              analysis: {
-                target: "Old Royal Naval College",
-                cosmovision: "Symmetry as Authority. Wren used the site to create a grand vista that framed the Queen's House, asserting the Navy's central role in British identity.",
-                driver: "Originally a hospital for seamen, built on the site of a royal palace to showcase Britain's naval and scientific dominance.",
-                aesthetics: "English Baroque. Portland stone, monumental domes, and a strict adherence to the classical laws of perspective."
-              },
+            { id: 7, date: "Apr 24", title: "Baroque Maritime", steps: 19000, 
               schedule: [
-                { time: "10:00", act: "Hito: Old Naval College", loc: "Old Royal Naval College", note: "Wren's symmetry." },
-                { time: "13:30", act: "Engineering: Foot Tunnel", loc: "Greenwich Foot Tunnel", note: "Victorian ironwork." }
+                { 
+                  time: "10:30", 
+                  departure: "08:00 (From Hostel - long walk)",
+                  act: "Hito: Old Naval College", 
+                  loc: "Old Royal Naval College", 
+                  note: "Wren's symmetry.",
+                  analysis: {
+                    cosmovision: "Symmetry as Absolute Imperial Authority. Christopher Wren used the site to create a grand vista that frames Inigo Jones' Queen’s House, asserting that the Navy was the central pillar of British identity and scientific dominance over the oceans.",
+                    driver: "Originally a hospital for seamen, built on the site of the former Tudor Royal Palace. The construction was driven by a royal desire to showcase Britain’s naval and scientific prosperity to all foreign visitors arriving in London by river.",
+                    aesthetics: "English Baroque at its peak. The aesthetics are defined by monumental Portland stone domes, grand colonnades, and the 'Painted Hall'—an illusionistic masterpiece of ceiling painting that reinforces the narrative of naval glory and Protestant succession."
+                  }
+                },
+                { 
+                  time: "14:00", 
+                  departure: "13:50",
+                  act: "Engineering: Foot Tunnel", 
+                  loc: "Greenwich Foot Tunnel", 
+                  note: "Victorian ironwork.",
+                  analysis: {
+                    cosmovision: "Subterranean Connectivity. This is a democratic piece of infrastructure designed to equalize the city by allowing workers to traverse the river without paying ferry tolls, effectively linking the residential south with the industrial north.",
+                    driver: "The expansion of the London Docks in the late 19th century. The driver was the logistical necessity of moving thousands of dockworkers daily from South London to the West India and Millwall docks with industrial speed and reliability.",
+                    aesthetics: "A utilitarian masterpiece of 'Hidden Engineering'. The aesthetic is defined by a 1,215-foot long iron-lined cylinder, glazed white bricks for light reflection, and the grand brick-domed shafts at either end that act as industrial beacons on the river's edge."
+                  }
+                }
               ], banksy: "Docklands - Search stencils on industrial pillars." },
 
             { id: 8, date: "Apr 25", title: "Institutional Light", steps: 20000, 
-              analysis: {
-                target: "Great Court (British Museum)",
-                cosmovision: "The 'Lost Space' recovered. Turning a redundant outdoor courtyard into the largest covered public square in Europe through technology.",
-                driver: "The British Museum's need to handle millions of visitors and provide a central hub that connects disconnected galleries.",
-                aesthetics: "Modern/Classical. Foster's glass and steel tessellated roof (each pane unique), wrapping around the neoclassical Reading Room."
-              },
               schedule: [
-                { time: "10:00", act: "Soane Museum (BOOKED)", loc: "Sir John Soane's Museum", note: "Zenithal light study." },
-                { time: "12:30", act: "British Museum (BOOKED)", loc: "British Museum", note: "Foster's roof nodes." }
+                { 
+                  time: "10:00", 
+                  departure: "08:50 (From Hostel)",
+                  act: "Soane Museum (BOOKED)", 
+                  loc: "Sir John Soane's Museum", 
+                  note: "Zenithal light study.",
+                  analysis: {
+                    cosmovision: "The Museum as an Architect's Labyrinth. Sir John Soane designed his home as a spatial mind-map, a laboratory where he could experiment with the emotional impact of light, shadow, and the layering of historical fragments from the classical world.",
+                    driver: "Soane’s obsessive mission to collect and educate. He used his personal residence to teach future architects through a physical collection of ruins, paintings, and models, ensuring the house would be preserved as a living textbook after his death.",
+                    aesthetics: "Hyper-compressed sections. The aesthetic is defined by dome lights, shifting floor levels, folding walls that hide paintings, and a strategic use of mirrors to expand small spaces into infinite archaeological vistas, all bathed in amber zenithal light."
+                  }
+                },
+                { 
+                  time: "12:30", 
+                  departure: "12:20",
+                  act: "British Museum (BOOKED)", 
+                  loc: "British Museum", 
+                  note: "Foster's roof nodes.",
+                  analysis: {
+                    cosmovision: "The 'Great Court' as a Modern Forum. Foster + Partners sought to reclaim the 'Lost Space' of the internal courtyard, converting it into a public square that acts as a central hub, reuniting the museum’s disparate wings under a singular sky.",
+                    driver: "The move of the British Library to St. Pancras left a massive gap in the heart of the museum. The driver was a Millennium project to manage modern visitor flows and provide a covered public realm that could survive the London climate.",
+                    aesthetics: "A 'Cloud' of tessellated glass and steel. The aesthetic triumph is the roof, composed of 1,656 unique panes of glass that wrap around the neoclassical Reading Room. It is a dialogue between the heavy stone of the past and the geometric precision of the digital age."
+                  }
+                }
               ], banksy: "Guard Dog & Yellow Flower in Shoreditch." },
 
             { id: 9, date: "Apr 26", title: "Energy Regeneration", steps: 15000, 
-              analysis: {
-                target: "Battersea Power Station",
-                cosmovision: "Electric Cathedral. A monument to coal power transformed into a monument to consumerism and tech, preserving the volume of the original 'Void'.",
-                driver: "Decades of dereliction following the plant's closure. The redevelopment is a symbol of London's post-industrial shift.",
-                aesthetics: "Industrial Art Deco. 1.75 million bricks, four iconic white chimneys, and an interior Turbine Hall that preserves industrial scale."
-              },
               schedule: [
-                { time: "10:00", act: "Battersea Power Station", loc: "Battersea Power Station", note: "Brick survey." },
-                { time: "17:00", act: "Sky Garden (BOOKED)", loc: "Sky Garden London", note: "Golden Hour study." }
+                { 
+                  time: "10:00", 
+                  departure: "09:00 (From Hostel)",
+                  act: "Battersea Power Station", 
+                  loc: "Battersea Power Station", 
+                  note: "Brick survey.",
+                  analysis: {
+                    cosmovision: "The 'Electric Cathedral' Reborn. Giles Gilbert Scott’s temple to coal power is now a secular monument to luxury, tech (Apple HQ), and retail, preserving the monumental volume of the original industrial 'Void' while filling it with modern life.",
+                    driver: "The post-industrial transition of London. Decades of dereliction were ended by a massive injection of Malaysian capital, driven by the desire to turn a toxic industrial ruin into a high-prestige residential and commercial anchor for the South Bank.",
+                    aesthetics: "Industrial Art Deco. The aesthetic is defined by 1.7 million new bricks, four iconic 51-meter white chimneys, and an internal Turbine Hall that preserves the epic scale of 1930s production through polished parquet, original control panels, and monumental voids."
+                  }
+                },
+                { 
+                  time: "17:00", 
+                  departure: "16:20 (Avoid Marathon lines)",
+                  act: "Sky Garden (BOOKED)", 
+                  loc: "Sky Garden London", 
+                  note: "Golden Hour study.",
+                  analysis: {
+                    cosmovision: "The 'Vertical Greenhouse'. This project represents the public 'Amenity' in exchange for air-rights. It is an attempt to compensate for the overshadowing caused by the 'Walkie Talkie' building by offering a sub-tropical park above the clouds.",
+                    driver: "Strict City of London planning requirements that mandate developers of towers to provide free-access viewing platforms. The construction was driven by the developer’s need to secure planning permits in a high-prestige, high-density financial district.",
+                    aesthetics: "Double-curved glass walls that offer 360-degree vistas. The aesthetic tension is between the brutalist concrete core of the skyscraper and the lush, soft landscaping of the Mediterranean and South African plants, all enclosed in a high-tech glass envelope."
+                  }
+                }
               ], banksy: "The shadows of the Sky Garden structure at 17:00 are unmatched." },
 
             { id: 10, date: "Apr 27", title: "Industrial Bankside", steps: 12000, 
-              analysis: {
-                target: "Tate Modern (Switch House)",
-                cosmovision: "The 'New Mountain'. A vertical gallery that breaks the traditional museum horizontal flow, acting as a beacon for the South Bank.",
-                driver: "The overwhelming success of the original Tate Modern (Bankside Power Station) required a massive expansion for live art and education.",
-                aesthetics: "Contemporary Brickwork. Perforated brick lattice that allows light to filter out at night, folded into a pyramid-like geometry."
-              },
               schedule: [
-                { time: "10:00", act: "Hito: Tate Modern", loc: "Tate Modern", note: "H&dM brickwork study." },
-                { time: "13:30", act: "Survey: Borough Market", loc: "Borough Market", note: "Shard looming above." }
+                { 
+                  time: "10:30", 
+                  departure: "09:15 (From Hostel)",
+                  act: "Hito: Tate Modern", 
+                  loc: "Tate Modern", 
+                  note: "H&dM brickwork study.",
+                  analysis: {
+                    cosmovision: "Art as Industrial Monolith. Herzog & de Meuron treat the museum as a 'New Mountain', shifting the narrative from Giles Gilbert Scott’s traditional brick power station to a contemporary, folding lattice that acts as a beacon for global culture.",
+                    driver: "The overwhelming success of the original gallery, which required a massive expansion for live art, performance, and education. The project was driven by the Tate’s need to accommodate over 5 million visitors annually in a post-industrial Southwark.",
+                    aesthetics: "The 'Switch House' (Blavatnik Building) is defined by its perforated brick skin that glows from within at night. Its folded pyramid geometry challenges the traditional rigidity of brick, creating a tactile, textured surface that changes with the moving sun."
+                  }
+                },
+                { 
+                  time: "13:30", 
+                  departure: "13:20",
+                  act: "Survey: Borough Market", 
+                  loc: "Borough Market", 
+                  note: "Shard looming above.",
+                  analysis: {
+                    cosmovision: "The 'Stomach' of the City. This site represents the survival of the organic, medieval market within the hyper-structured financial grid. It is architecture as a layered, noisy, and aromatic urban ecosystem that refuses to be gentrified into silence.",
+                    driver: "Urban market sustainability and food heritage. The driver is the maintenance of a functional wholesale hub that has successfully transitioned into a curated epicurean space, ensuring that the local community and global tourists intersect over food.",
+                    aesthetics: "A chaotic but beautiful palimpsest. The aesthetics feature Victorian iron viaducts overhead, high-tech glass 'market halls' by Miller Hare, and green glass Art-Deco entrances, all layered under the permanent structural shadow of Renzo Piano’s Shard."
+                  }
+                }
               ], banksy: "Southwark Bridge river stencils." }
         ];
 
@@ -247,39 +396,40 @@
             content.innerHTML = `
                 <div class="mb-8">
                     <h3 class="text-4xl font-black text-zinc-900 leading-none tracking-tighter mb-2">${data.title}</h3>
-                    <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">${data.date} • ARCHITECTURAL ANALYSIS</p>
+                    <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">${data.date} • FIELD OPS</p>
                 </div>
 
-                <section class="arch-card">
-                    <div class="mb-4">
-                        <span class="section-label">Highlight Site</span>
-                        <h4 class="text-xl font-black text-zinc-800">${data.analysis.target}</h4>
-                    </div>
-                    <div class="grid gap-4">
-                        <div>
-                            <span class="section-label">Cosmovision</span>
-                            <p class="text-xs text-zinc-600 leading-relaxed">${data.analysis.cosmovision}</p>
-                        </div>
-                        <div>
-                            <span class="section-label">Driving Factor</span>
-                            <p class="text-xs text-zinc-600 leading-relaxed">${data.analysis.driver}</p>
-                        </div>
-                        <div>
-                            <span class="section-label">Aesthetic Language</span>
-                            <p class="text-xs text-zinc-600 leading-relaxed">${data.analysis.aesthetics}</p>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="space-y-4">
+                <div class="space-y-8">
                     ${data.schedule.map((node, index) => `
                         <div class="timeline-item">
                             <div class="flex justify-between items-baseline mb-2">
-                                <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded uppercase tracking-widest">${node.time}</span>
-                                <span class="text-[8px] font-bold text-zinc-300 uppercase">Sequence 0${index + 1}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded uppercase tracking-widest">${node.time}</span>
+                                    <span class="departure-tag uppercase tracking-tighter">Dep: ${node.departure}</span>
+                                </div>
+                                <span class="text-[8px] font-bold text-zinc-300 uppercase">Seq 0${index + 1}</span>
                             </div>
+                            
                             <h4 class="font-black text-zinc-800 text-lg leading-tight mb-1">${node.act}</h4>
-                            <p class="text-xs text-zinc-500 mb-4 leading-relaxed">${node.note}</p>
+                            <p class="text-xs text-zinc-500 mb-3 leading-relaxed">${node.note}</p>
+
+                            <section class="arch-card mb-4">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <span class="section-label">Cosmovision</span>
+                                        <p class="text-[11px] text-zinc-600 leading-relaxed italic border-l-2 border-zinc-100 pl-3">${node.analysis.cosmovision}</p>
+                                    </div>
+                                    <div>
+                                        <span class="section-label">Driving Factors</span>
+                                        <p class="text-[11px] text-zinc-600 leading-relaxed pl-3">${node.analysis.driver}</p>
+                                    </div>
+                                    <div>
+                                        <span class="section-label">Aesthetic Language</span>
+                                        <p class="text-[11px] text-zinc-800 leading-relaxed font-medium pl-3 bg-zinc-50 rounded-md py-1">${node.analysis.aesthetics}</p>
+                                    </div>
+                                </div>
+                            </section>
+                            
                             <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(node.loc)}" 
                                target="_blank" class="map-btn">
                                📍 GPS Walk Navigation
