@@ -27,19 +27,20 @@
             font-weight: 700; margin-top: 8px; transition: all 0.2s; gap: 8px;
         }
         .audio-btn:disabled { background: #9ca3af; cursor: not-allowed; }
-        .timeline-item { position: relative; padding-left: 28px; border-left: 2px solid #e4e4e7; padding-bottom: 32px; }
+        .timeline-item { position: relative; padding-left: 28px; border-left: 2px solid #e4e4e7; padding-bottom: 48px; }
         .timeline-item::before {
             content: ''; position: absolute; left: -7px; top: 0;
             width: 12px; height: 12px; background: white;
             border: 2px solid #18181b; border-radius: 50%;
         }
-        .arch-card { background: white; border-radius: 16px; padding: 16px; border: 1px solid #e4e4e7; margin-top: 12px; }
-        .banksy-box { background: #18181b; color: #f4f4f5; border-radius: 16px; padding: 20px; border-left: 6px solid #e11d48; margin-top: 20px; }
-        .section-label { font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #a1a1aa; margin-bottom: 2px; display: block; }
-        .departure-tag { font-size: 0.7rem; font-weight: 800; color: #e11d48; background: #fff1f2; padding: 2px 8px; border-radius: 99px; }
+        .arch-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e4e4e7; margin-top: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .banksy-box { background: #18181b; color: #f4f4f5; border-radius: 16px; padding: 24px; border-left: 6px solid #e11d48; margin-top: 24px; }
+        .section-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; color: #a1a1aa; margin-bottom: 4px; display: block; }
+        .departure-tag { font-size: 0.7rem; font-weight: 800; color: #e11d48; background: #fff1f2; padding: 2px 10px; border-radius: 99px; }
         
         .loader { border: 2px solid #f3f3f3; border-top: 2px solid #ffffff; border-radius: 50%; width: 14px; height: 14px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .text-justify { text-align: justify; }
     </style>
 </head>
 <body class="antialiased">
@@ -47,23 +48,23 @@
     <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-zinc-200">
         <div class="px-5 py-4 flex justify-between items-end">
             <div>
-                <h1 class="text-2xl font-black tracking-tighter uppercase italic leading-none">London <span class="text-rose-600">Arch-Manual</span></h1>
-                <div class="flex items-center gap-3 mt-2">
-                    <button onclick="setLang('en')" id="btn-en" class="text-[10px] font-bold px-2 py-1 rounded bg-zinc-900 text-white transition-all">EN</button>
-                    <button onclick="setLang('es')" id="btn-es" class="text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 text-zinc-400 transition-all">ES</button>
+                <h1 class="text-2xl font-black tracking-tighter uppercase italic leading-none text-zinc-900">London <span class="text-rose-600">Arch-Manual</span></h1>
+                <div class="flex items-center gap-3 mt-3">
+                    <button onclick="setLang('en')" id="btn-en" class="text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-900 text-white transition-all shadow-sm">EN</button>
+                    <button onclick="setLang('es')" id="btn-es" class="text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-100 text-zinc-400 transition-all shadow-sm">ES</button>
                 </div>
             </div>
             <div class="text-right">
-                <span id="step-badge" class="text-[10px] bg-zinc-900 px-2 py-1 rounded text-white font-black tracking-tighter italic">-- STEPS</span>
+                <span id="step-badge" class="text-[10px] bg-zinc-900 px-3 py-1.5 rounded text-white font-black tracking-tighter italic">-- STEPS</span>
             </div>
         </div>
         
         <nav class="flex overflow-x-auto no-scrollbar border-t border-zinc-100 bg-zinc-50/50">
-            <div id="tab-container" class="flex whitespace-nowrap px-2"></div>
+            <div id="tab-container" class="flex whitespace-nowrap px-2 py-1"></div>
         </nav>
     </header>
 
-    <main class="px-5 py-8 space-y-8 pb-32">
+    <main class="px-5 py-8 space-y-10 pb-32">
         <div id="day-content"></div>
 
         <section class="bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm">
@@ -74,12 +75,12 @@
         </section>
     </main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 p-4 px-6 flex justify-between items-center shadow-2xl">
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 p-4 px-6 flex justify-between items-center shadow-2xl z-40">
         <div class="flex flex-col">
             <span id="op-zone-label" class="text-[9px] font-black text-zinc-400 uppercase">Operational Zone</span>
             <span id="footer-day" class="text-sm font-black text-zinc-900 tracking-tight">Loading...</span>
         </div>
-        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center font-bold text-zinc-400">↑</button>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center font-bold text-zinc-400 hover:bg-zinc-200 transition-colors">↑</button>
     </div>
 
     <script>
@@ -88,69 +89,316 @@
         let currentDayId = 1;
 
         const translations = {
-            en: { steps: "STEPS", metabolism: "Physical Metabolism Analysis", opZone: "Operational Zone", fieldOps: "FIELD OPS", hito: "Street Art Hito", dep: "Dep", fromHostel: "From Hostel", cosmovision: "Cosmovision", drivers: "Driving Factors", aesthetics: "Aesthetic Language", listen: "Listen AI Summary", generating: "Generating Audio...", error: "Error generating audio." },
-            es: { steps: "PASOS", metabolism: "Análisis de Metabolismo Físico", opZone: "Zona Operacional", fieldOps: "OPERACIONES DE CAMPO", hito: "Hito de Arte Urbano", dep: "Sal", fromHostel: "Desde Hostal", cosmovision: "Cosmovisión", drivers: "Motores de Diseño", aesthetics: "Lenguaje Estético", listen: "Escuchar Resumen IA", generating: "Generando Audio...", error: "Error al generar audio." }
+            en: { steps: "STEPS", metabolism: "Physical Metabolism Analysis", opZone: "Operational Zone", fieldOps: "FIELD OPS", hito: "Street Art Highlight", dep: "Dep", fromHostel: "From Hostel", cosmovision: "Architectural Cosmovision", drivers: "Socio-Economic Drivers", aesthetics: "Aesthetic & Technical Language", listen: "Audio Guide", generating: "Preparing Narrator...", error: "Signal lost." },
+            es: { steps: "PASOS", metabolism: "Análisis de Metabolismo Físico", opZone: "Zona Operacional", fieldOps: "OPERACIONES DE CAMPO", hito: "Hito de Arte Urbano", dep: "Sal", fromHostel: "Desde Hostal", cosmovision: "Cosmovisión Arquitectónica", drivers: "Motores Socio-Económicos", aesthetics: "Lenguaje Estético y Técnico", listen: "Audioguía IA", generating: "Preparando narrador...", error: "Señal perdida." }
         };
 
         const masterItinerary = [
-            { id: 1, date: "Apr 18", title_en: "Adaptive Reuse: Bayswater", title_es: "Reutilización Adaptativa: Bayswater", steps: 5000, 
+            { id: 1, date: "Apr 18", title_en: "Heritage & Displacement: Bayswater", title_es: "Patrimonio y Desplazamiento: Bayswater", steps: 5000, 
               schedule: [
-                { time: "19:00", dep_en: "18:50 (From Hostel)", dep_es: "18:50 (Desde Hostal)", act_en: "Check-in: Smart Hyde Park Inn", act_es: "Check-in: Smart Hyde Park Inn", loc: "Smart Hyde Park Inn London", note_en: "Setup base.", note_es: "Establecer base.", analysis: { cosmovision_en: "Architecture as a node for global nomadic flow, surgically adapting Victorian residential stock.", cosmovision_es: "La arquitectura como nodo para el flujo nómada global, adaptando quirúrgicamente el patrimonio residencial victoriano.", driver_en: "Democratization of travel vs urban real-estate pressure.", driver_es: "Democratización del viaje frente a la presión inmobiliaria urbana.", aesthetics_en: "Stucco-fronted facade masking hyper-rationalized internal utilitarian ergonomics.", aesthetics_es: "Fachada con frente de estuco que oculta una ergonomía utilitaria interna hiper-racionalizada." } },
-                { time: "19:45", dep_en: "19:35", dep_es: "19:35", act_en: "Survey: Whiteleys", act_es: "Inspección: Whiteleys", loc: "Whiteleys London", note_en: "Adaptive reuse study.", note_es: "Estudio de reutilización adaptativa.", analysis: { cosmovision_en: "Treatment of heritage as an architectural palimpsest; the courtyard as a lung for modern life.", cosmovision_es: "Tratamiento del patrimonio como un palimpsesto arquitectónico; el patio como pulmón de la vida moderna.", driver_en: "Collapse of department stores vs demand for vertical luxury villages.", driver_es: "Colapso de los grandes almacenes frente a la demanda de núcleos de lujo verticales.", aesthetics_en: "High-tech glass and timber heart inserted into a Grade II 1911 neoclassical facade.", aesthetics_es: "Corazón de vidrio y madera de alta tecnología insertado en una fachada neoclásica de 1911 (Grado II)." } }
-              ], banksy_en: "The Painter (Notting Hill) - Stencil of a painter writing 'Banksy'.", banksy_es: "El Pintor (Notting Hill) - Estarcido de un pintor escribiendo 'Banksy'." },
+                { 
+                  time: "19:00", dep_en: "18:50 (Base)", dep_es: "18:50 (Base)",
+                  act_en: "Setup: Smart Hyde Park Inn", act_es: "Ajuste: Smart Hyde Park Inn",
+                  loc: "Smart Hyde Park Inn London", 
+                  note_en: "Establishing the architectural hub for the next 10 days.", note_es: "Estableciendo el centro arquitectónico para los próximos 10 días.", 
+                  analysis: { 
+                    cosmovision_en: "This space represents the 'Urban Micro-Cell'. It explores how dense, high-ceilinged Victorian domestic architecture—originally designed for a single wealthy family—can be surgically subdivided to house dozens of global nomads. It is a study in functionalist extreme efficiency where the historic skin is the only constant.", 
+                    cosmovision_es: "Este espacio representa la 'Micro-Célula Urbana'. Explora cómo la densa arquitectura doméstica victoriana de techos altos, originalmente diseñada para una sola familia acomodada, puede ser subdividida quirúrgicamente para albergar a docenas de nómadas globales. Es un estudio de eficiencia funcionalista extrema donde la piel histórica es la única constante.", 
+                    driver_en: "The primary driver is the 'democratization of the Grand Tour'. The pressure of London real estate forces a pragmatic repurposing of residential stock. It reflects the 21st-century reality of high-turnover mobility requiring low-cost entry points into high-value urban historical centers.", 
+                    driver_es: "El motor principal es la 'democratización del Grand Tour'. La presión inmobiliaria de Londres obliga a una reutilización pragmática del parque residencial. Refleja la realidad del siglo XXI de movilidad de alta rotación que requiere puntos de entrada de bajo costo en centros históricos urbanos de alto valor.", 
+                    aesthetics_en: "The aesthetic is a palimpsest of eras: a refined Stucco-fronted terrace outside masking a hyper-utilitarian ergonomics inside. Observe the contrast between the generous proportions of the entrance and the modular, compressed partitioning of the sleeping quarters.", 
+                    aesthetics_es: "La estética es un palimpsesto de eras: una refinada terraza con frente de estuco en el exterior que oculta una ergonomía hiper-utilitaria en el interior. Observe el contraste entre las proporciones generosas de la entrada y la compartimentación modular y comprimida de los dormitorios." 
+                  } 
+                },
+                { 
+                  time: "19:45", dep_en: "19:35", dep_es: "19:35",
+                  act_en: "Inquiry: Whiteleys Redevelopment", act_es: "Indagación: Redesarrollo de Whiteleys",
+                  loc: "Whiteleys London", 
+                  note_en: "Analyzing the 'Second Life' of the Department Store.", note_es: "Analizando la 'Segunda Vida' de los Grandes Almacenes.", 
+                  analysis: { 
+                    cosmovision_en: "Foster + Partners redefine the historic department store as a 'Vertical Village'. The vision treats the 1911 monument not as a museum, but as a living organism. The courtyard is reconceived as a central lung, allowing light to penetrate a shell that was once fossilized by retail logistics.", 
+                    cosmovision_es: "Foster + Partners redefine los grandes almacenes históricos como una 'Villa Vertical'. La visión trata al monumento de 1911 no como un museo, sino como un organismo vivo. El patio se concibe de nuevo como un pulmón central, permitiendo que la luz penetre en una cáscara que una vez estuvo fosilizada por la logística comercial.", 
+                    driver_en: "Driven by the 'Death of the High Street' and the rise of integrated luxury ecosystems. The project responds to the global demand for managed high-end residences that offer total living services (gym, dining, hospitality) within a singular historical envelope.", 
+                    driver_es: "Impulsado por la 'Muerte de la Calle Principal' y el auge de los ecosistemas de lujo integrados. El proyecto responde a la demanda global de residencias de alta gama gestionadas que ofrecen servicios integrales de vida (gimnasio, restauración, hospitalidad) dentro de un envoltorio histórico singular.", 
+                    aesthetics_en: "The aesthetic tension lies in the dialogue between the heavy Portland stone shell and the lightweight, transparent structural interventions. Look for the massive internal glass-and-timber atrium that inserts a digital-age geometry into the Edwardian masonry.", 
+                    aesthetics_es: "La tensión estética reside en el diálogo entre la pesada cáscara de piedra de Portland y las intervenciones estructurales ligeras y transparentes. Busque el enorme atrio interno de vidrio y madera que inserta una geometría de la era digital en la mampostería eduardiana." 
+                  } 
+                }
+              ], banksy_en: "The Painter (Notting Hill) - A stencil of a painter writing 'Banksy' under the Westway bridge.", banksy_es: "El Pintor (Notting Hill) - Un estarcido de un pintor escribiendo 'Banksy' bajo el puente de Westway." },
             
-            { id: 2, date: "Apr 19", title_en: "Brutalist Urbanism", title_es: "Urbanismo Brutalista", steps: 18000, 
+            { id: 2, date: "Apr 19", title_en: "Brutalism as Urban Strata", title_es: "Brutalismo como Estratos Urbanos", steps: 18000, 
               schedule: [
-                { time: "11:00", dep_en: "09:45", dep_es: "09:45", act_en: "Hito: National Theatre", act_es: "Hito: National Theatre", loc: "National Theatre London", note_en: "Concrete layering study.", note_es: "Estudio de capas de hormigón.", analysis: { cosmovision_en: "Conceived as 'Urban Strata', an artificial geological formation inviting vertical movement.", cosmovision_es: "Concebido como 'Estratos Urbanos', una formación geológica artificial que invita al movimiento vertical.", driver_en: "Post-war mission for a secular temple of arts rejecting elitist ornamentation.", driver_es: "Misión de posguerra para un templo secular de las artes que rechaza la ornamentación elitista.", aesthetics_en: "Béton Brut board-marked textures and interlocking volumes with deep cinematic shadows.", aesthetics_es: "Texturas de hormigón Béton Brut marcadas por tablas y volúmenes entrelazados con sombras cinematográficas." } },
-                { time: "14:30", dep_en: "14:10", dep_es: "14:10", act_en: "Analysis: Westminster Hall", act_es: "Análisis: Westminster Hall", loc: "Westminster Hall", note_en: "Medieval timber-roof study.", note_es: "Estudio de techumbre medieval.", analysis: { cosmovision_en: "Meeting point of medieval engineering and royal authority in a sacred administrative vessel.", cosmovision_es: "Punto de encuentro entre la ingeniería medieval y la autoridad real en un receptáculo administrativo sagrado.", driver_en: "14th-century requirement for an unprecedented clear-span roof for state banquets.", driver_es: "Necesidad en el siglo XIV de una techumbre de luz libre sin precedentes para banquetes de estado.", aesthetics_en: "Hammerbeam roof (1393) - oak arches creating celestial weightlessness in stone.", aesthetics_es: "Techumbre de Hammerbeam (1393) - arcos de roble que crean una ingravidez celestial en piedra." } }
-              ], banksy_en: "Leake Street Tunnel - Banksy's 'Cans Festival' site.", banksy_es: "Túnel de Leake Street - Sitio del 'Cans Festival' de Banksy." },
+                { 
+                  time: "11:00", dep_en: "09:30", dep_es: "09:30",
+                  act_en: "Analysis: National Theatre", act_es: "Análisis: National Theatre",
+                  loc: "National Theatre London", 
+                  note_en: "Denys Lasdun's concrete symphony.", note_es: "La sinfonía de hormigón de Denys Lasdun.", 
+                  analysis: { 
+                    cosmovision_en: "Denys Lasdun famously described this as 'Urban Strata'. His vision was for a building that didn't stop at the sidewalk but became a man-made cliffside. The terraces are intentional extensions of the Thames path, inviting the citizen to roam the structure as if it were a natural park.", 
+                    cosmovision_es: "Denys Lasdun describió esto famosamente como 'Estratos Urbanos'. Su visión era la de un edificio que no se detenía en la acera, sino que se convertía en un acantilado artificial. Las terrazas son extensiones intencionadas del camino del Támesis, invitando al ciudadano a recorrer la estructura como si fuera un parque natural.", 
+                    driver_en: "The driver was post-war social democracy. The government wanted a 'National' theater that felt truly accessible, rejecting the gilded ornamentation of royal playhouses. It was meant to be a secular temple of culture where the building's guts (the structure) were as important as the performance.", 
+                    driver_es: "El motor fue la socialdemocracia de posguerra. El gobierno quería un teatro 'Nacional' que se sintiera realmente accesible, rechazando la ornamentación dorada de los teatros reales. Debía ser un templo secular de la cultura donde las entrañas del edificio (la estructura) fueran tan importantes como la actuación.", 
+                    aesthetics_en: "Brutalist perfection. Note the 'Béton Brut' finish: the concrete was poured into timber molds, leaving a permanent grain texture. The interplay of horizontal volumes and the absence of a primary facade force the viewer to engage with the building from multiple perspectives.", 
+                    aesthetics_es: "Perfección brutalista. Note el acabado 'Béton Brut': el hormigón se vertió en moldes de madera, dejando una textura de veta permanente. El juego de volúmenes horizontales y la ausencia de una fachada principal obligan al espectador a interactuar con el edificio desde múltiples perspectivas." 
+                  } 
+                },
+                { 
+                  time: "14:30", dep_en: "14:00", dep_es: "14:00",
+                  act_en: "Study: Westminster Hall", act_es: "Estudio: Westminster Hall",
+                  loc: "Westminster Hall", 
+                  note_en: "The medieval heart of British Law.", note_es: "El corazón medieval de la ley británica.", 
+                  analysis: { 
+                    cosmovision_en: "A physical manifestation of 'Divine Kingship' and ancient stability. The Hall represents the continuity of English law, designed to survive fire and war. It is a sacred vessel for administration, where architecture provides the gravity necessary for the state's authority.", 
+                    cosmovision_es: "Una manifestación física de la 'Realeza Divina' y la estabilidad antigua. El Hall representa la continuidad de la ley inglesa, diseñado para sobrevivir al fuego y la guerra. Es un receptáculo sagrado para la administración, donde la arquitectura proporciona la gravedad necesaria para la autoridad del estado.", 
+                    driver_en: "In 1393, Richard II demanded a space that would awe his subjects and host the grandest royal feasts. The driver was a structural ambition to create the largest clear-span roof in Europe, moving away from columns to allow for total visual dominance of the king's presence.", 
+                    driver_es: "En 1393, Ricardo II exigió un espacio que asombrara a sus súbditos y albergara los banquetes reales más grandiosos. El motor fue una ambición estructural para crear el techo de luz libre más grande de Europa, alejándose de las columnas para permitir un dominio visual total de la presencia del rey.", 
+                    aesthetics_en: "Perpendicular Gothic mastery. The Hammerbeam roof is the aesthetic zenith: a complex system of oak trusses carved with angels, creating a feeling of weightlessness. The stone walls anchor the space, but the timber roof draws the eye upward toward a celestial structural forest.", 
+                    aesthetics_es: "Maestría del Gótico Perpendicular. El techo de Hammerbeam es el cénit estético: un sistema complejo de cerchas de roble talladas con ángeles, creando una sensación de ingravidez. Las paredes de piedra anclan el espacio, pero el techo de madera atrae la mirada hacia arriba, hacia un bosque estructural celestial." 
+                  } 
+                }
+              ], banksy_en: "Leake Street Tunnel - Banksy's 'Cans Festival' site. A dynamic sanctuary for urban ink.", banksy_es: "Túnel de Leake Street - El sitio del 'Cans Festival' de Banksy. Un santuario dinámico para la tinta urbana." },
 
-            { id: 3, date: "Apr 20", title_en: "High-Tech Corporate", title_es: "Corporativismo High-Tech", steps: 19000, 
+            { id: 3, date: "Apr 20", title_en: "High-Tech: The Square Mile", title_es: "High-Tech: La Milla Cuadrada", steps: 19000, 
               schedule: [
-                { time: "10:00", dep_en: "08:30", dep_es: "08:30", act_en: "Hito: Lloyd's of London", act_es: "Hito: Lloyd's de Londres", loc: "Lloyd's of London", note_en: "Rogers' masterclass.", note_es: "Clase maestra de Rogers.", analysis: { cosmovision_en: "The building as a mechanical organism celebrating serviceability through its 'Inside-Out' philosophy.", cosmovision_es: "El edificio como organismo mecánico que celebra la funcionalidad mediante su filosofía 'Inside-Out'.", driver_en: "Need for an unencumbered trading floor that evolves without structural barriers.", driver_es: "Necesidad de una planta de contratación diáfana que evolucione sin barreras estructurales.", aesthetics_en: "Stainless steel exoskeleton, high-tech elevators, and a restless industrial silhouette.", aesthetics_es: "Exoesqueleto de acero inoxidable, ascensores de alta tecnología y una silueta industrial inquieta." } },
-                { time: "13:00", dep_en: "12:50", dep_es: "12:50", act_en: "Survey: Garden at 120", act_es: "Inspección: Garden at 120", loc: "The Garden at 120", note_en: "Rooftop section analysis.", note_es: "Análisis de sección de azotea.", analysis: { cosmovision_en: "Reclaiming the horizon as a public common above the private financial grid.", cosmovision_es: "Reclamo del horizonte como bien público por encima de la red financiera privada.", driver_en: "City planning mandates for public realm accessibility in high-density areas.", driver_es: "Mandatos urbanísticos para la accesibilidad del dominio público en zonas de alta densidad.", aesthetics_en: "Wisteria pergolas framing the brutalist steel of the surrounding financial district.", aesthetics_es: "Pérgolas de glicinas que enmarcan el acero brutalista del distrito financiero circundante." } }
-              ], banksy_en: "Basquiat Murals - Satire protected by high-quality glass.", banksy_es: "Murales Basquiat - Sátira protegida por cristal de alta calidad." },
+                { 
+                  time: "10:00", dep_en: "08:45", dep_es: "08:45",
+                  act_en: "Hito: Lloyd's Building", act_es: "Hito: Edificio Lloyd's",
+                  loc: "Lloyd's of London Building", 
+                  note_en: "Richard Rogers' 'Inside-Out' machine.", note_es: "La máquina 'Inside-Out' de Richard Rogers.", 
+                  analysis: { 
+                    cosmovision_en: "Architecture as a mechanical organism. Richard Rogers rejected the 'Box' in favor of 'Bowellism'—celebrating the building's internal systems as its external ornament. It views the city as a dynamic site of industrial metabolism that never stops.", 
+                    cosmovision_es: "Arquitectura como organismo mecánico. Richard Rogers rechazó la 'Caja' en favor del 'Bowellism', celebrando los sistemas internos del edificio como su ornamento externo. Ve la ciudad como un sitio dinámico de metabolismo industrial que nunca se detiene.", 
+                    driver_en: "The insurance market needed an unencumbered space—'The Room'—that could expand or contract without structural barriers. By moving ducts, lifts, and toilets to the exterior, the interior remains a pure 'Cathedral of Commerce' ready for technological evolution.", 
+                    driver_es: "El mercado de seguros necesitaba un espacio sin obstáculos —'The Room'— que pudiera expandirse o contraerse sin barreras estructurales. Al mover conductos, ascensores y aseos al exterior, el interior permanece como una pura 'Catedral del Comercio' lista para la evolución tecnológica.", 
+                    aesthetics_en: "Gleaming stainless steel, blue glass, and red ducting. The aesthetic is restless and hyper-industrial. Observe the 'Plug-in' service pods and the exposed cranes on top, emphasizing that the building is an ongoing, serviceable machine rather than a finished sculpture.", 
+                    aesthetics_es: "Reluciente acero inoxidable, vidrio azul y conductos rojos. La estética es inquieta e hiper-industrial. Observe los módulos de servicio 'Plug-in' y las grúas expuestas en la parte superior, enfatizando que el edificio es una máquina útil en curso en lugar de una escultura terminada." 
+                  } 
+                },
+                { 
+                  time: "13:00", dep_en: "12:50", dep_es: "12:50",
+                  act_en: "Inquiry: Garden at 120", act_es: "Indagación: Garden at 120",
+                  loc: "The Garden at 120", 
+                  note_en: "Reclaiming the horizon for the public.", note_es: "Reclamando el horizonte para el público.", 
+                  analysis: { 
+                    cosmovision_en: "Sky-democracy. This site reclaims the roof as a public common, challenging the notion that the best views of London belong only to corporate CEOs. It is a pocket of soft landscape floating within the hard steel grid of the financial center.", 
+                    cosmovision_es: "Democracia en las alturas. Este sitio reclama la azotea como un bien público, desafiando la noción de que las mejores vistas de Londres pertenecen solo a los directores corporativos. Es un bolsillo de paisaje suave que flota dentro de la dura red de acero del centro financiero.", 
+                    driver_en: "Driven by 'Section 106' agreements. The City planning authorities mandate developers to provide significant public realm in exchange for height density. The construction was a trade-off: a massive tower for the private sector in exchange for a garden for the citizen.", 
+                    driver_es: "Impulsado por los acuerdos de la 'Sección 106'. Las autoridades de planificación de la City obligan a los promotores a proporcionar un espacio público significativo a cambio de densidad en altura. La construcción fue un intercambio: una torre masiva para el sector privado a cambio de un jardín para el ciudadano.", 
+                    aesthetics_en: "A mix of horticultural softness and structural tectonic power. Wisteria pergolas, water rills, and concrete pavers create a serene environment that frames close-up, brutal reflections of the Shard and the Scalpel towers.", 
+                    aesthetics_es: "Una mezcla de suavidad hortícola y poder tectónico estructural. Pérgolas de glicinas, riachuelos de agua y pavimentos de hormigón crean un ambiente sereno que enmarca reflejos brutales y cercanos de las torres Shard y Scalpel." 
+                  } 
+                }
+              ], banksy_en: "Basquiat Murals (Beech Street) - Satirical commentary on policing art, protected by high-quality glass.", banksy_es: "Murales de Basquiat (Beech Street) - Comentario satírico sobre la vigilancia del arte, protegido por cristal de alta calidad." },
+            
+            { id: 4, date: "Apr 21", title_en: "Coastal Exoticism", title_es: "Exotismo Costero", steps: 20000, 
+              schedule: [
+                { 
+                  time: "11:00", dep_en: "07:30 (Victoria Station)", dep_es: "07:30 (Victoria Station)",
+                  act_en: "Inquiry: Royal Pavilion", act_es: "Indagación: Royal Pavilion",
+                  loc: "Royal Pavilion Brighton", 
+                  note_en: "John Nash's Indo-Saracenic dream.", note_es: "El sueño indo-sarraceno de John Nash.", 
+                  analysis: { 
+                    cosmovision_en: "Architecture as 'Escapist Fantasy'. This pavilion is a theatrical mask for the British monarchy, allowing the Prince Regent to play with the aesthetics of an idealized East while remaining in a coastal village. It is a visual rejection of London's rigid neoclassical order.", 
+                    cosmovision_es: "La arquitectura como 'Fantasía Escapista'. Este pabellón es una máscara teatral para la monarquía británica, permitiendo al Príncipe Regente jugar con la estética de un Oriente idealizado mientras permanece en un pueblo costero. Es un rechazo visual del rígido orden neoclásico de Londres.", 
+                    driver_en: "The hedonistic lifestyle of the future George IV and the arrival of the railway. The construction was fueled by the new accessibility of Brighton, turning it into a weekend playground for the elite seeking exotic stimulation and sea-water cures.", 
+                    driver_es: "El estilo de vida hedonista del futuro Jorge IV y la llegada del ferrocarril. La construcción fue impulsada por la nueva accesibilidad de Brighton, convirtiéndola en un patio de recreo de fin de semana para la élite que buscaba estimulación exótica y curas de agua de mar.", 
+                    aesthetics_en: "Indo-Saracenic shell over a pioneering industrial frame. Cast-iron columns (painted as bamboo) support massive onion domes and minarets. The interior is pure 'Chinoiserie': a dizzying display of dragons, golden chandeliers, and intense red silks.", 
+                    aesthetics_es: "Cáscara indo-sarracena sobre una estructura industrial pionera. Columnas de hierro fundido (pintadas como bambú) sostienen enormes cúpulas acebolladas y minaretes. El interior es pura 'Chinoiserie': una exhibición vertiginosa de dragones, lámparas doradas e intensas sedas rojas." 
+                  } 
+                }
+              ], banksy_en: "Prince Albert Pub - Site of the 'Kissing Policemen' replica. A pilgrimage for street art fans.", banksy_es: "Prince Albert Pub - Sitio de la réplica de los 'Policías Besándose'. Una peregrinación para los fans del arte urbano." },
 
-            { id: 4, date: "Apr 21", title_en: "Indo-Saracenic Escapism", title_es: "Escapismo Indo-Sarraceno", steps: 20000, 
+            { id: 5, date: "Apr 22", title_en: "Enlightenment Planning", title_es: "Planificación de la Ilustración", steps: 16000, 
               schedule: [
-                { time: "11:00", dep_en: "07:30 (Hostel)", dep_es: "07:30 (Hostal)", act_en: "Hito: Royal Pavilion", act_es: "Hito: Royal Pavilion", loc: "Royal Pavilion Brighton", note_en: "Nash's engineering.", note_es: "Ingeniería de Nash.", analysis: { cosmovision_en: "Architecture as a theatrical mask for royal escapism from court etiquette.", cosmovision_es: "La arquitectura como máscara teatral para el escapismo real de la etiqueta de la corte.", driver_en: "The Prince Regent's hedonistic desire for a palace aided by new rail access.", driver_es: "Deseo hedonista del Príncipe Regente de un palacio apoyado por el nuevo acceso ferroviario.", aesthetics_en: "Islamic onion domes concealing a pioneering cast-iron industrial frame.", aesthetics_es: "Cúpulas acebolladas islámicas que ocultan una estructura industrial pionera de hierro fundido." } }
-              ], banksy_en: "Prince Albert Pub - Site of the Kissing Policemen.", banksy_es: "Prince Albert Pub - Sitio de los Policías Besándose." },
+                { 
+                  time: "14:30", dep_en: "10:15 (Paddington)", dep_es: "10:15 (Paddington)",
+                  act_en: "Hito: Roman Baths", act_es: "Hito: Roman Baths",
+                  loc: "Roman Baths Bath", 
+                  note_en: "Ancient hydrothermal engineering.", note_es: "Ingeniería hidrotérmica antigua.", 
+                  analysis: { 
+                    cosmovision_en: "The meeting of water and the divine. The Romans viewed the natural springs as a 'Liminal Space' where the underworld touched the earth. Architecture here served to channel this sacred energy through complex lead piping and monumental stone enclosures.", 
+                    cosmovision_es: "El encuentro del agua y lo divino. Los romanos veían los manantiales naturales como un 'Espacio Liminal' donde el inframundo tocaba la tierra. La arquitectura aquí sirvió para canalizar esta energía sagrada a través de complejas tuberías de plomo y recintos de piedra monumentales.", 
+                    driver_en: "Roman colonial socialization. The driver was to pacify and 'civilize' the province of Britannia by providing the luxuries of the capital. The baths were the 'Facebook' of the Roman world: a hub for political deals, hygiene, and ritual offerings.", 
+                    driver_es: "Socialización colonial romana. El motor era pacificar y 'civilizar' la provincia de Britannia proporcionando los lujos de la capital. Las termas eran el 'Facebook' del mundo romano: un centro para acuerdos políticos, higiene y ofrendas rituales.", 
+                    aesthetics_en: "A rich stratigraphy of time. Roman lead-lined pools and heavy masonry are layered under medieval vaults and 19th-century neoclassical terraces. The honey-colored Bath Stone unifies these centuries into a singular, warm atmospheric experience.", 
+                    aesthetics_es: "Una rica estratigrafía del tiempo. Las piscinas romanas revestidas de plomo y la mampostería pesada están estratificadas bajo bóvedas medievales y terrazas neoclásicas del siglo XIX. La piedra de Bath de color miel unifica estos siglos en una experiencia atmosférica cálida y singular." 
+                  } 
+                },
+                { 
+                  time: "17:00", dep_en: "16:45", dep_es: "16:45",
+                  act_en: "Analysis: Royal Crescent", act_es: "Análisis: Royal Crescent",
+                  loc: "The Royal Crescent Bath", 
+                  note_en: "John Wood the Younger's urban geometry.", note_es: "La geometría urbana de John Wood el Joven.", 
+                  analysis: { 
+                    cosmovision_en: "The 'Enlightenment in Stone'. John Wood sought to impose an ordered, mathematical sequence onto the organic British landscape. The Crescent represents the belief that nature can be tamed through the rigid application of classical Roman orders.", 
+                    cosmovision_es: "La 'Ilustración en Piedra'. John Wood buscó imponer una secuencia ordenada y matemática sobre el paisaje británico orgánico. El Crescent representa la creencia de que la naturaleza puede ser domesticada mediante la aplicación rígida de los órdenes romanos clásicos.", 
+                    driver_en: "Speculative real estate for the 18th-century elite. The driver was the need for high-prestige seasonal housing that looked like a singular monumental palace but functioned as individual townhouses for the visiting aristocracy.", 
+                    driver_es: "Bienes raíces especulativos para la élite del siglo XVIII. El motor fue la necesidad de viviendas estacionales de alto prestigio que parecieran un palacio monumental singular pero funcionaran como casas individuales para la aristocracia visitante.", 
+                    aesthetics_en: "Palladian harmony on a massive scale. 114 Ionic columns forming a continuous 500-foot sweep. The aesthetic power comes from the repetition and the rhythmic shadows of the colonnade against the glowing oolitic limestone.", 
+                    aesthetics_es: "Armonía palladiana a escala masiva. 114 columnas jónicas que forman un barrido continuo de 150 metros. El poder estético proviene de la repetición y las sombras rítmicas de la columnata contra la resplandeciente piedra caliza oolítica." 
+                  } 
+                }
+              ], banksy_en: "Visual Detox: The UNESCO zone is strictly anti-graffiti. Analyze the aging of stone instead.", banksy_es: "Desintoxicación Visual: La zona UNESCO es estrictamente anti-graffiti. Analice el envejecimiento de la piedra en su lugar." },
 
-            { id: 5, date: "Apr 22", title_en: "Palladian Order", title_es: "Orden Palladiano", steps: 16000, 
+            { id: 6, date: "Apr 23", title_en: "Regeneration: The Knowledge Quarter", title_es: "Regeneración: El Barrio del Conocimiento", steps: 17000, 
               schedule: [
-                { time: "14:30", dep_en: "10:15 (Paddington)", dep_es: "10:15 (Paddington)", act_en: "Roman Baths (BOOKED)", act_es: "Termas Romanas (RESERVADO)", loc: "Roman Baths Bath", note_en: "Ancient hydraulics.", note_es: "Hidráulica antigua.", analysis: { cosmovision_en: "A liminal space where hydrothermal engineering met the cult of Sulis-Minerva.", cosmovision_es: "Un espacio liminal donde la ingeniería hidrotérmica se encontraba con el culto a Sulis-Minerva.", driver_en: "Roman colonial policy of pacification through sophisticated infrastructure.", driver_es: "Política colonial romana de pacificación mediante infraestructuras sofisticadas.", aesthetics_en: "Stratigraphy of lead-lined pools, Roman masonry, and 19th-century neoclassical terraces.", aesthetics_es: "Estratigrafía de piscinas revestidas de plomo, sillería romana y terrazas neoclásicas del siglo XIX." } },
-                { time: "17:00", dep_en: "16:45", dep_es: "16:45", act_en: "Hito: Royal Crescent", act_es: "Hito: Royal Crescent", loc: "The Royal Crescent Bath", note_en: "Urban planning study.", note_es: "Estudio de urbanismo.", analysis: { cosmovision_en: "Enlightenment urbanism seeking to tame nature through rigid Roman geometry.", cosmovision_es: "Urbanismo de la Ilustración que busca domesticar la naturaleza mediante la rígida geometría romana.", driver_en: "Speculative real estate housing the 18th-century aristocracy in a single palace-facade.", driver_es: "Bienes raíces especulativos que alojan a la aristocracia del siglo XVIII en una única fachada palaciega.", aesthetics_en: "114 Ionic columns forming a continuous 500-foot sweep of golden Bath Stone.", aesthetics_es: "114 columnas jónicas que forman un barrido continuo de 150 metros de piedra dorada de Bath." } }
-              ], banksy_en: "UNESCO Zone - Zero graffiti. Analysis of limestone textures.", banksy_es: "Zona UNESCO - Cero graffiti. Análisis de texturas de piedra caliza." },
+                { 
+                  time: "10:00", dep_en: "09:00", dep_es: "09:00",
+                  act_en: "Survey: King's X Canopy", act_es: "Inspección: Marquesina de King's X",
+                  loc: "King's Cross Station", 
+                  note_en: "A steel tree growing in Victorian brick.", note_es: "Un árbol de acero que crece en ladrillo victoriano.", 
+                  analysis: { 
+                    cosmovision_en: "The 'Transit Gateway'. This structure transforms a Victorian bottleneck into a fluid space of movement. It respects the past by never touching the original 1852 brick facade, allowing the old and the new to coexist in a state of mutual respect.", 
+                    cosmovision_es: "La 'Puerta de Tránsito'. Esta estructura transforma un cuello de botella victoriano en un espacio de movimiento fluido. Respeta el pasado al no tocar nunca la fachada original de ladrillo de 1852, permitiendo que lo viejo y lo nuevo coexistan en un estado de respeto mutuo.", 
+                    driver_en: "The $500m regeneration of King's Cross. Driven by the new Eurostar link and the move of the Knowledge Quarter (Google, CSM). The station had to handle 50 million passengers annually while creating a new social heart for the district.", 
+                    driver_es: "La regeneración de King's Cross de 500 millones de dólares. Impulsada por el nuevo enlace Eurostar y el traslado del Barrio del Conocimiento (Google, CSM). La estación debía gestionar 50 millones de pasajeros anuales mientras creaba un nuevo corazón social para el distrito.", 
+                    aesthetics_en: "A semicircular steel 'fan-vault'. A single white tree of columns branches out into a complex tessellated roof. The aesthetic is one of weightless buoyancy, with indirect lighting that turns the canopy into a glowing cloud at night.", 
+                    aesthetics_es: "Una 'bóveda de abanico' de acero semicircular. Un solo árbol blanco de columnas se ramifica en un complejo techo teselado. La estética es de una flotabilidad ingrávida, con iluminación indirecta que convierte la marquesina en una nube resplandeciente por la noche." 
+                  } 
+                },
+                { 
+                  time: "14:00", dep_en: "13:45", dep_es: "13:45",
+                  act_en: "Hito: Coal Drops Yard", act_es: "Hito: Coal Drops Yard",
+                  loc: "Coal Drops Yard", 
+                  note_en: "Heatherwick's architectural kiss.", note_es: "El beso arquitectónico de Heatherwick.", 
+                  analysis: { 
+                    cosmovision_en: "The 'Spatial Merger'. Thomas Heatherwick rejected the traditional 'box' retail model. His vision was to bridge two distinct histories—the Eastern and Western Coal Drops—with a third, fluid modern element to create a psychological and physical center.", 
+                    cosmovision_es: "La 'Fusión Espacial'. Thomas Heatherwick rechazó el modelo de venta tradicional de 'caja'. Su visión era unir dos historias distintas —los depósitos de carbón del este y del oeste— con un tercer elemento moderno y fluido para crear un centro psicológico y físico.", 
+                    driver_en: "Reclaiming industrial rail lands. The driver was to turn derelict coal storage units into a high-end social and retail hub, proving that industrial heritage can be a driver for 21st-century luxury commerce.", 
+                    driver_es: "Recuperación de terrenos industriales ferroviarios. El motor fue convertir unidades de almacenamiento de carbón abandonadas en un centro social y comercial de alta gama, demostrando que el patrimonio industrial puede ser un motor para el comercio de lujo del siglo XXI.", 
+                    aesthetics_en: "The 'Kissing Roofs'. Fluid slate-covered roofs peel upwards like wings to meet in mid-air. This is framed by black steel pillars and the rough, tactile materiality of original Victorian brick and granite railway tracks.", 
+                    aesthetics_es: "Los 'Techos que se Besan'. Techos fluidos cubiertos de pizarra se despegan hacia arriba como alas para encontrarse en medio del aire. Esto está enmarcado por pilares de acero negro y la materialidad rugosa y táctil del ladrillo victoriano original y las vías de granito." 
+                  } 
+                }
+              ], banksy_en: "Camden Canal - Historic graffiti nodes under railway overpasses. Look for remnants in the industrial undercurrent.", banksy_es: "Canal de Camden - Nodos históricos de graffiti bajo los pasos elevados ferroviarios. Busque restos en el trasfondo industrial." },
 
-            { id: 6, date: "Apr 23", title_en: "Industrial Synthesis", title_es: "Síntesis Industrial", steps: 17000, 
+            { id: 7, date: "Apr 24", title_en: "Naval Power to Corporate Glass", title_es: "Poder Naval al Vidrio Corporativo", steps: 19000, 
               schedule: [
-                { time: "10:00", dep_en: "09:00", dep_es: "09:00", act_en: "Survey: King's X Canopy", act_es: "Inspección: Marquesina King's X", loc: "King's Cross Station", note_en: "McAslan's steel canopy.", note_es: "Marquesina de acero de McAslan.", analysis: { cosmovision_en: "The transit gateway as a fluid space that respects Victorian masonry through contrast.", cosmovision_es: "La puerta de tránsito como espacio fluido que respeta la mampostería victoriana mediante el contraste.", driver_en: "King's Cross regeneration integrating the station with the knowledge quarter.", driver_es: "Regeneración de King's Cross integrando la estación con el barrio del conocimiento.", aesthetics_en: "White steel fan-vault tree branching into a weightless tessellated roof.", aesthetics_es: "Árbol de bóveda de abanico de acero blanco que se ramifica en un techo teselado ingrávido." } },
-                { time: "14:00", dep_en: "13:50", dep_es: "13:50", act_en: "Hito: Coal Drops Yard", act_es: "Hito: Coal Drops Yard", loc: "Coal Drops Yard", note_en: "Heatherwick's kiss.", note_es: "El beso de Heatherwick.", analysis: { cosmovision_en: "A connective tissue that bridges the industrial past with the retail future.", cosmovision_es: "Un tejido conectivo que une el pasado industrial con el futuro comercial.", driver_en: "Reclaiming derelict rail lands for social footfall and high-end commerce.", driver_es: "Recuperación de terrenos ferroviarios abandonados para el flujo social y el comercio de lujo.", aesthetics_en: "Fluid slate-covered roofs peeling upwards framed by raw London brickwork.", aesthetics_es: "Techos fluidos cubiertos de pizarra que se despegan hacia arriba enmarcados por ladrillo londinense." } }
-              ], banksy_en: "Regent's Canal - Search for remnants under the bridges.", banksy_es: "Canal del Regente - Buscar restos bajo los puentes." },
+                { 
+                  time: "10:30", dep_en: "08:30 (Long walk)", dep_es: "08:30 (Paseo largo)",
+                  act_en: "Hito: Old Royal Naval College", act_es: "Hito: Old Royal Naval College",
+                  loc: "Old Royal Naval College", 
+                  note_en: "Christopher Wren's Baroque symmetry.", note_es: "La simetría barroca de Christopher Wren.", 
+                  analysis: { 
+                    cosmovision_en: "Symmetry as Authority. Christopher Wren used the site to create a grand vista that perfectly frames Inigo Jones' Queen’s House. It represents the British Navy's role as the central pillar of imperial and scientific dominance.", 
+                    cosmovision_es: "La simetría como autoridad. Christopher Wren utilizó el sitio para crear una gran vista que enmarca perfectamente la Queen's House de Inigo Jones. Representa el papel de la Marina Británica como pilar central del dominio imperial y científico.", 
+                    driver_en: "The transformation of a royal palace site into a grand hospital for seamen. Driven by Queen Mary's desire to showcase the nation's gratitude to its sailors through an architecture that mirrored the glory of Rome and Versailles.", 
+                    driver_es: "La transformación de un sitio de palacio real en un gran hospital para marineros. Impulsado por el deseo de la Reina María de mostrar la gratitud de la nación a sus marineros a través de una arquitectura que reflejaba la gloria de Roma y Versalles.", 
+                    aesthetics_en: "English Baroque at its peak. Twin Portland stone domes, monumental colonnades, and the 'Painted Hall'—a masterpiece of illusionistic ceiling painting that reinforces the narrative of naval prosperity.", 
+                    aesthetics_es: "El barroco inglés en su apogeo. Cúpulas gemelas de piedra de Portland, columnatas monumentales y el 'Painted Hall' —una obra maestra de la pintura de techos ilusionista que refuerza la narrativa de la prosperidad naval." 
+                  } 
+                },
+                { 
+                  time: "14:00", dep_en: "13:50", dep_es: "13:50",
+                  act_en: "Engineering: Foot Tunnel", act_es: "Ingeniería: Foot Tunnel",
+                  loc: "Greenwich Foot Tunnel", 
+                  note_en: "Subterranean social connectivity.", note_es: "Conectividad social subterránea.", 
+                  analysis: { 
+                    cosmovision_en: "The 'Equalizer'. A democratic piece of infrastructure designed to link the residential south with the industrial north without paying ferry tolls. It is engineering as a tool for social mobility for the dockworking class.", 
+                    cosmovision_es: "El 'Ecualizador'. Una pieza democrática de infraestructura diseñada para vincular el sur residencial con el norte industrial sin pagar peajes de ferry. Es ingeniería como herramienta de movilidad social para la clase trabajadora portuaria.", 
+                    driver_en: "The industrial expansion of the London Docks. The driver was the logistical necessity of moving thousands of workers daily from Greenwich to the West India Docks with industrial reliability and speed.", 
+                    driver_es: "La expansión industrial de los muelles de Londres. El motor fue la necesidad logística de desplazar diariamente a miles de trabajadores de Greenwich a los muelles de West India con fiabilidad y rapidez industrial.", 
+                    aesthetics_en: "A utilitarian masterpiece of 'Hidden Engineering'. A 1,215-foot long iron-lined cylinder with glazed white bricks for light reflection and grand brick-domed shafts acting as industrial beacons.", 
+                    aesthetics_es: "Una obra maestra utilitaria de 'Ingeniería Oculta'. Un cilindro de 370 metros revestido de hierro con ladrillos blancos vitrificados para reflejar la luz y grandes pozos con cúpulas de ladrillo que actúan como faros industriales." 
+                  } 
+                }
+              ], banksy_en: "Dockland Remnants - Stencils near DLR pillars. Search for the intersection of street art and finance.", banksy_es: "Restos de Dockland - Estarcidos cerca de los pilares del DLR. Busque la intersección entre el arte urbano y las finanzas." },
 
-            { id: 7, date: "Apr 24", title_en: "Baroque Maritime", title_es: "Barroco Marítimo", steps: 19000, 
+            { id: 8, date: "Apr 25", title_en: "Institutional Light: The Museum Axis", title_es: "Luz Institucional: El Eje de Museos", steps: 20000, 
               schedule: [
-                { time: "10:30", dep_en: "08:00 (Long walk)", dep_es: "08:00 (Paseo largo)", act_en: "Hito: Old Naval College", act_es: "Hito: Old Naval College", loc: "Old Royal Naval College", note_en: "Wren's symmetry.", note_es: "Simetría de Wren.", analysis: { cosmovision_en: "Symmetry as imperial authority; a grand vista framing the Queen's House.", cosmovision_es: "La simetría como autoridad imperial; una gran vista que enmarca la Queen's House.", driver_en: "Royal desire to showcase naval and scientific dominance via a river-front monument.", driver_es: "Deseo real de mostrar el dominio naval y científico mediante un monumento frente al río.", aesthetics_en: "English Baroque Portland stone domes and the illusionistic Painted Hall.", aesthetics_es: "Cúpulas de piedra de Portland del barroco inglés y el Painted Hall ilusionista." } },
-                { time: "14:00", dep_en: "13:50", dep_es: "13:50", act_en: "Engineering: Foot Tunnel", act_es: "Ingeniería: Foot Tunnel", loc: "Greenwich Foot Tunnel", note_en: "Victorian ironwork.", note_es: "Trabajo en hierro victoriano.", analysis: { cosmovision_en: "Subterranean connectivity designed to link the residential south to the industrial north.", cosmovision_es: "Conectividad subterránea diseñada para unir el sur residencial con el norte industrial.", driver_en: "Late 19th-century need to move thousands of workers daily with reliability.", driver_es: "Necesidad de finales del XIX de desplazar a miles de trabajadores diariamente con fiabilidad.", aesthetics_en: "Glazed white brick reflecting light within a utilitarian iron-lined cylinder.", aesthetics_es: "Ladrillo blanco vitrificado que refleja la luz dentro de un cilindro revestido de hierro." } }
-              ], banksy_en: "Dockland Stencils - Search for markers on industrial pillars.", banksy_es: "Estarcidos de Dockland - Buscar marcas en pilares industriales." },
+                { 
+                  time: "10:00", dep_en: "08:50 (Base)", dep_es: "08:50 (Base)",
+                  act_en: "Inquiry: Sir John Soane's Museum", act_es: "Indagación: Museo Sir John Soane",
+                  loc: "Sir John Soane's Museum", 
+                  note_en: "The laboratory of light and memory.", note_es: "El laboratorio de luz y memoria.", 
+                  analysis: { 
+                    cosmovision_en: "The Museum as an Architect's Labyrinth. Soane designed his home as a spatial mind-map, a laboratory where he could experiment with the emotional impact of light and the layering of classical fragments.", 
+                    cosmovision_es: "El museo como laberinto de arquitecto. Soane diseñó su casa como un mapa mental espacial, un laboratorio donde podía experimentar con el impacto emocional de la luz y la estratificación de fragmentos clásicos.", 
+                    driver_en: "Soane’s mission to collect and educate. He used his personal residence to teach future architects through ruins, paintings, and models, ensuring the house was preserved as a 'living textbook' through an Act of Parliament.", 
+                    driver_es: "La misión de Soane de coleccionar y educar. Utilizó su residencia personal para enseñar a futuros arquitectos a través de ruinas, pinturas y maquetas, asegurando que la casa se conservara como un 'libro de texto vivo' mediante una ley del Parlamento.", 
+                    aesthetics_en: "Hyper-compressed sections. Shifting floor levels, folding walls that hide paintings, and amber dome lights create infinite archaeological vistas. Mirrors are strategically placed to expand small spaces into infinity.", 
+                    aesthetics_es: "Secciones hiper-comprimidas. Niveles de suelo cambiantes, paredes plegables que ocultan pinturas y claraboyas de cúpula ámbar crean infinitas vistas arqueológicas. Los espejos se colocan estratégicamente para expandir espacios pequeños hacia el infinito." 
+                  } 
+                },
+                { 
+                  time: "12:30", dep_en: "12:15", dep_es: "12:15",
+                  act_en: "Hito: Great Court (BM)", act_es: "Hito: Gran Atrio (BM)",
+                  loc: "British Museum", 
+                  note_en: "Norman Foster's covered public square.", note_es: "La plaza pública cubierta de Norman Foster.", 
+                  analysis: { 
+                    cosmovision_en: "Reclaiming the Void. Foster + Partners converted a redundant internal courtyard into the largest covered public square in Europe. It is a modern forum that reunites the museum’s wings under a singular high-tech sky.", 
+                    cosmovision_es: "Reclamando el vacío. Foster + Partners convirtió un patio interno redundante en la plaza pública cubierta más grande de Europa. Es un foro moderno que reúne las alas del museo bajo un cielo singular de alta tecnología.", 
+                    driver_en: "The British Library's move to St. Pancras left a gap in the museum’s core. The driver was a Millennium project to manage visitor flow and provide a climate-controlled public heart for millions of annual tourists.", 
+                    driver_es: "El traslado de la Biblioteca Británica a St. Pancras dejó un hueco en el núcleo del museo. El motor fue un proyecto del Milenio para gestionar el flujo de visitantes y proporcionar un corazón público climatizado para millones de turistas anuales.", 
+                    aesthetics_en: "A 'Cloud' of glass and steel. Compositing 1,656 unique glass panes wrapping around the neoclassical Reading Room. It is a brilliant dialogue between the heavy stone of the past and digital-age geometric precision.", 
+                    aesthetics_es: "Una 'Nube' de vidrio y acero. Compuesta por 1.656 paneles de vidrio únicos que envuelven la Sala de Lectura neoclásica. Es un diálogo brillante entre la pesada piedra del pasado y la precisión geométrica de la era digital." 
+                  } 
+                }
+              ], banksy_en: "Guard Dog & Yellow Flower (Shoreditch) - Essential pieces in the cradle of London's original street art scene.", banksy_es: "Guard Dog y Yellow Flower (Shoreditch) - Piezas esenciales en la cuna de la escena original de arte urbano de Londres." },
 
-            { id: 8, date: "Apr 25", title_en: "Institutional Light", title_es: "Luz Institucional", steps: 20000, 
+            { id: 9, date: "Apr 26", title_en: "Power Stations & Sky Parks", title_es: "Centrales Eléctricas y Parques Aéreos", steps: 15000, 
               schedule: [
-                { time: "10:00", dep_en: "08:50 (Hostel)", dep_es: "08:50 (Hostal)", act_en: "Soane Museum (BOOKED)", act_es: "Soane Museum (RESERVADO)", loc: "Sir John Soane's Museum", note_en: "Zenithal light study.", note_es: "Estudio de luz cenital.", analysis: { cosmovision_en: "A laboratory for light, shadow, and the layering of historical classical fragments.", cosmovision_es: "Un laboratorio de luz, sombra y la estratificación de fragmentos clásicos históricos.", driver_en: "Soane's mission to educate architects through an obsessive personal collection.", driver_es: "Misión de Soane de educar a arquitectos mediante una obsesiva colección personal.", aesthetics_en: "Hyper-compressed sections, dome lights, and mirrors expanding small spaces.", aesthetics_es: "Secciones hiper-comprimidas, lucernarios de cúpula y espejos que expanden espacios pequeños." } },
-                { time: "12:30", dep_en: "12:20", dep_es: "12:20", act_en: "British Museum (BOOKED)", act_es: "British Museum (RESERVADO)", loc: "British Museum", note_en: "Foster's roof nodes.", note_es: "Nodos de techumbre de Foster.", analysis: { cosmovision_en: "The Great Court as a modern forum reclaiming the 'Lost Space' of the courtyard.", cosmovision_es: "El Gran Atrio como foro moderno que recupera el 'Espacio Perdido' del patio.", driver_en: "Millennium project to reunite museum wings and manage visitor flows.", driver_es: "Proyecto del milenio para reunir las alas del museo y gestionar los flujos de visitantes.", aesthetics_en: "Tessellated glass cloud of 1,656 unique panes wrapping the Reading Room.", aesthetics_es: "Nube de vidrio teselado de 1.656 paneles únicos que envuelven la Sala de Lectura." } }
-              ], banksy_en: "Guard Dog & Yellow Flower - Essential Shoreditch staples.", banksy_es: "Guard Dog y Yellow Flower - Elementos esenciales de Shoreditch." },
+                { 
+                  time: "10:00", dep_en: "09:00 (Avoid Marathon)", dep_es: "09:00 (Evitar Maratón)",
+                  act_en: "Analysis: Battersea Power Station", act_es: "Análisis: Battersea Power Station",
+                  loc: "Battersea Power Station", 
+                  note_en: "The 'Electric Cathedral' reborn.", note_es: "La 'Catedral Eléctrica' renacida.", 
+                  analysis: { 
+                    cosmovision_en: "Industrial Resurrection. Giles Gilbert Scott’s temple to coal power is now a secular monument to luxury and tech. It preserves the monumental volume of the original 'Void' while filling it with a 21st-century economic metabolism.", 
+                    cosmovision_es: "Resurrección Industrial. El templo de Giles Gilbert Scott al poder del carbón es ahora un monumento secular al lujo y la tecnología. Preserva el volumen monumental del 'Vacío' original mientras lo llena con un metabolismo económico del siglo XXI.", 
+                    driver_en: "The post-industrial transition. Decades of dereliction were ended by a massive injection of capital to turn a toxic ruin into a high-prestige anchor for the South Bank, housing the Apple HQ.", 
+                    driver_es: "La transición post-industrial. Décadas de abandono terminaron con una inyección masiva de capital para convertir una ruina tóxica en un ancla de alto prestigio para el South Bank, albergando la sede central de Apple.", 
+                    aesthetics_en: "Industrial Art Deco at its most epic. 1.7 million new bricks, four white chimneys, and internal Turbine Halls preserving polished parquet and original control panels in a cathedral of production.", 
+                    aesthetics_es: "Art Déco industrial en su estado más épico. 1,7 millones de ladrillos nuevos, cuatro chimeneas blancas y salas de turbinas internas que preservan el parqué pulido y los paneles de control originales en una catedral de la producción." 
+                  } 
+                },
+                { 
+                  time: "17:00", dep_en: "16:15 (River Boat)", dep_es: "16:15 (River Boat)",
+                  act_en: "Hito: Sky Garden", act_es: "Hito: Sky Garden",
+                  loc: "Sky Garden London", 
+                  note_en: "Golden hour at 155 meters.", note_es: "Hora dorada a 155 metros.", 
+                  analysis: { 
+                    cosmovision_en: "The Vertical Greenhouse. This represents the public 'Amenity' trade-off for air-rights. It is an attempt to compensate for the overshadowing of the City by offering a park above the clouds, democratizing the view for free.", 
+                    cosmovision_es: "El Invernadero Vertical. Esto representa el intercambio de 'Servicio' público por derechos aéreos. Es un intento de compensar el ensombrecimiento de la City ofreciendo un parque por encima de las nubes, democratizando la vista gratuitamente.", 
+                    driver_en: "Strict City planning rules mandate tower developers to provide accessible viewing platforms. The construction was a logistical necessity for the developer to secure permits in a high-density financial district.", 
+                    driver_es: "Las estrictas normas de planificación de la City obligan a los promotores de torres a proporcionar plataformas de observación accesibles. La construcción fue una necesidad logística para que el promotor obtuviera los permisos en un distrito financiero de alta densidad.", 
+                    aesthetics_en: "Double-curved glass walls offering 360-degree vistas. The tension is between the brutalist concrete core of the 'Walkie Talkie' and the soft Mediterranean and South African landscaping enclosed in a high-tech skin.", 
+                    aesthetics_es: "Muros de vidrio de doble curvatura que ofrecen vistas de 360 grados. La tensión reside entre el núcleo de hormigón brutalista del 'Walkie Talkie' y el suave paisajismo mediterráneo y sudafricano encerrado en una piel de alta tecnología." 
+                  } 
+                }
+              ], banksy_en: "Sky Garden Vistas - Study the structural shadows at 17:00. The lighting emphasizes the steel ribs like a cathedral vault.", banksy_es: "Vistas del Sky Garden - Estudie las sombras estructurales a las 17:00. La iluminación enfatiza las costillas de acero como la bóveda de una catedral." },
 
-            { id: 9, date: "Apr 26", title_en: "Marathon & Sky Garden", title_es: "Maratón y Sky Garden", steps: 15000, 
+            { id: 10, date: "Apr 27", title_en: "Bankside Farewell", title_es: "Despedida en Bankside", steps: 12000, 
               schedule: [
-                { time: "10:00", dep_en: "09:00", dep_es: "09:00", act_en: "Battersea Power Station", act_es: "Battersea Power Station", loc: "Battersea Power Station", note_en: "Brick survey.", note_es: "Inspección de ladrillo.", analysis: { cosmovision_en: "The 'Electric Cathedral' reborn as a secular monument to tech and luxury.", cosmovision_es: "La 'Catedral Eléctrica' renacida como monumento secular a la tecnología y el lujo.", driver_en: "Decades of industrial ruins ending with a massive global injection of capital.", driver_es: "Décadas de ruinas industriales que terminan con una inyección masiva de capital global.", aesthetics_en: "Industrial Art Deco with 1.7 million new bricks and four iconic white chimneys.", aesthetics_es: "Art Déco industrial con 1,7 millones de ladrillos nuevos y cuatro chimeneas blancas." } },
-                { time: "17:00", dep_en: "16:20 (Avoid crowds)", dep_es: "16:20 (Evitar masas)", act_en: "Sky Garden (BOOKED)", act_es: "Sky Garden (RESERVADO)", loc: "Sky Garden London", note_en: "Golden Hour study.", note_es: "Estudio de la hora dorada.", analysis: { cosmovision_en: "The 'Vertical Greenhouse' offered as a public amenity in exchange for air-rights.", cosmovision_es: "El 'Invernadero Vertical' ofrecido como servicio público a cambio de derechos de vuelo.", driver_en: "Planning requirement to compensate for overshadowing in a high-density area.", driver_es: "Requisito urbanístico para compensar el ensombrecimiento en una zona de alta densidad.", aesthetics_en: "Double-curved glass walls enclosing lush sub-tropical landscaping above the City.", aesthetics_es: "Muros de vidrio de doble curvatura que encierran un exuberante paisaje subtropical." } }
-              ], banksy_en: "Sky Garden View - Technical shadows of the structure at sunset.", banksy_es: "Vistas del Sky Garden - Sombras técnicas de la estructura al atardecer." },
-
-            { id: 10, date: "Apr 27", title_en: "Industrial Bankside", title_es: "Bankside Industrial", steps: 12000, 
-              schedule: [
-                { time: "10:30", dep_en: "09:15", dep_es: "09:15", act_en: "Hito: Tate Modern", act_es: "Hito: Tate Modern", loc: "Tate Modern", note_en: "H&dM brickwork study.", note_es: "Estudio de ladrillo de H&dM.", analysis: { cosmovision_en: "Art as Industrial Monolith; the museum treated as a new vertical mountain.", cosmovision_es: "El arte como monolito industrial; el museo tratado como una nueva montaña vertical.", driver_en: "Massive expansion needs for live art and education in a post-industrial district.", driver_es: "Necesidad de expansión masiva para el arte en vivo y educación en un distrito industrial.", aesthetics_en: "Switch House's perforated brick skin glowing like a pyramid at night.", aesthetics_es: "La piel de ladrillo perforado de la Switch House brillando como una pirámide de noche." } },
-                { time: "13:30", dep_en: "13:20", dep_es: "13:20", act_en: "Survey: Borough Market", act_es: "Inspección: Borough Market", loc: "Borough Market", note_en: "Shard looming above.", note_es: "The Shard asomando arriba.", analysis: { cosmovision_en: "Survival of an organic medieval ecosystem within the structured financial grid.", cosmovision_es: "Supervivencia de un ecosistema medieval orgánico dentro de la red financiera estructurada.", driver_en: "Urban market sustainability transitioning to a curated epicurean space.", driver_es: "Sostenibilidad del mercado urbano en transición a un espacio epicúreo curado.", aesthetics_en: "Victorian iron viaducts meeting green glass Art-Deco entrances under shadows.", aesthetics_es: "Viaductos de hierro victorianos con entradas Art Déco de vidrio verde bajo las sombras." } }
-              ], banksy_en: "Southwark Bridge - Search underpasses for river-themed stencils.", banksy_es: "Southwark Bridge - Buscar estarcidos fluviales en los pasos inferiores." }
+                { 
+                  time: "10:30", dep_en: "09:15", dep_es: "09:15",
+                  act_en: "Inquiry: Tate Modern extension", act_es: "Indagación: Extensión de la Tate Modern",
+                  loc: "Tate Modern", 
+                  note_en: "Herzog & de Meuron's vertical mountain.", note_es: "La montaña vertical de Herzog & de Meuron.", 
+                  analysis: { 
+                    cosmovision_en: "Art as Industrial Monolith. Herzog & de Meuron treat the museum as a 'New Mountain' that shifts the narrative from Scott's horizontal power station to a contemporary folding lattice that acts as a beacon for global culture.", 
+                    cosmovision_es: "El arte como monolito industrial. Herzog & de Meuron tratan al museo como una 'Nueva Montaña' que cambia la narrativa de la central eléctrica horizontal de Scott a una red plegable contemporánea que actúa como faro de la cultura global.", 
+                    driver_en: "The success of the original gallery required a massive expansion for live art and performance. The driver was the Tate’s need to accommodate over 5 million visitors in a post-industrial Southwark.", 
+                    driver_es: "El éxito de la galería original requirió una expansión masiva para el arte en vivo y la performance. El motor fue la necesidad de la Tate de acomodar a más de 5 millones de visitantes en un Southwark post-industrial.", 
+                    aesthetics_en: "The Blavatnik Building is defined by its perforated brick skin that glows at night. Its folded pyramid geometry challenges the rigidity of brick, creating a tactile surface that changes with the moving sun.", 
+                    aesthetics_es: "El edificio Blavatnik se define por su piel de ladrillo perforado que brilla por la noche. Su geometría de pirámide plegada desafía la rigidez del ladrillo, creando una superficie táctil que cambia con el sol en movimiento." 
+                  } 
+                },
+                { 
+                  time: "13:30", dep_en: "13:20", dep_es: "13:20",
+                  act_en: "Final: Borough Market", act_es: "Final: Borough Market",
+                  loc: "Borough Market", 
+                  note_en: "The city's stomach under iron viaducts.", note_es: "El estómago de la ciudad bajo viaductos de hierro.", 
+                  analysis: { 
+                    cosmovision_en: "Survival of the Organic. This site represents a medieval market ecosystem that refused to be gentrified. It is architecture as a layered, noisy, and aromatic urban lung under the permanent shadow of Renzo Piano's Shard.", 
+                    cosmovision_es: "Supervivencia de lo Orgánico. Este sitio representa un ecosistema de mercado medieval que se negó a ser gentrificado. Es arquitectura como un pulmón urbano estratificado, ruidoso y aromático bajo la sombra permanente del Shard de Renzo Piano.", 
+                    driver_en: "Urban sustainability and food heritage. Driven by the maintenance of a functional wholesale hub that successfully transitioned into a curated epicurean space where community and global tourism intersect.", 
+                    driver_es: "Sostenibilidad urbana y patrimonio alimentario. Impulsado por el mantenimiento de un centro mayorista funcional que transitó con éxito hacia un espacio epicúreo curado donde se cruzan la comunidad y el turismo global.", 
+                    aesthetics_en: "Victorian iron viaducts meeting high-tech glass halls and green glass Art-Deco entrances. The aesthetics are defined by the rail noise, the smell of produce, and the layering of industrial materials over centuries.", 
+                    aesthetics_es: "Viaductos de hierro victorianos que se encuentran con salas de vidrio de alta tecnología y entradas Art-Deco de vidrio verde. La estética se define por el ruido ferroviario, el olor de los productos y la estratificación de materiales industriales a lo largo de los siglos." 
+                  } 
+                }
+              ], banksy_en: "Southwark Bridge remnants - Check the industrial underpasses near the river bank for stencils.", banksy_es: "Restos de Southwark Bridge - Busque estarcidos en los pasos inferiores industriales cerca de la orilla del río." }
         ];
 
         async function fetchWithRetry(url, options, retries = 5) {
@@ -174,17 +422,10 @@
             btn.disabled = true;
             btn.innerHTML = `<div class="loader"></div> <span>${translations[currentLang].generating}</span>`;
             try {
-                const textPrompt = `As an expert architect, provide an elaborate 45-second narration about ${node.loc}. 
-                Focus on its cosmovision, drivers, and aesthetics based on these details: 
-                Cosmo: ${node.analysis['cosmovision_'+currentLang]}, 
-                Driver: ${node.analysis['driver_'+currentLang]}, 
-                Aesthetics: ${node.analysis['aesthetics_'+currentLang]}. 
-                Speak in ${currentLang === 'en' ? 'English' : 'Spanish'}. Do not use markdown or symbols, only plain text.`;
-
+                const textPrompt = `Narrate as a charismatic architect about ${node.loc}. Elaborate on: ${node.analysis['cosmovision_'+currentLang]}, ${node.analysis['driver_'+currentLang]}, ${node.analysis['aesthetics_'+currentLang]}. Language: ${currentLang === 'en' ? 'English' : 'Spanish'}. 120 words max. No markdown.`;
                 const textResult = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                     method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: textPrompt }] }] })
                 });
-
                 const script = textResult.candidates[0].content.parts[0].text;
                 const voice = currentLang === 'en' ? 'Zephyr' : 'Algieba';
                 const ttsResult = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
@@ -194,7 +435,6 @@
                         model: "gemini-2.5-flash-preview-tts"
                     })
                 });
-
                 const base64Audio = ttsResult.candidates[0].content.parts[0].inlineData.data;
                 const pcmData = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
                 const wavBuffer = pcmToWav(pcmData.buffer, 24000);
@@ -204,7 +444,6 @@
                 audio.play();
                 audio.onended = () => { btn.disabled = false; btn.innerHTML = originalText; };
             } catch (error) {
-                console.error(error);
                 btn.innerHTML = `⚠️ ${translations[currentLang].error}`;
                 setTimeout(() => { btn.disabled = false; btn.innerHTML = originalText; }, 3000);
             }
@@ -225,8 +464,8 @@
 
         function setLang(lang) {
             currentLang = lang;
-            document.getElementById('btn-en').className = lang === 'en' ? 'text-[10px] font-bold px-2 py-1 rounded bg-zinc-900 text-white' : 'text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 text-zinc-400';
-            document.getElementById('btn-es').className = lang === 'es' ? 'text-[10px] font-bold px-2 py-1 rounded bg-zinc-900 text-white' : 'text-[10px] font-bold px-2 py-1 rounded bg-zinc-100 text-zinc-400';
+            document.getElementById('btn-en').className = lang === 'en' ? 'text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-900 text-white' : 'text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-100 text-zinc-400';
+            document.getElementById('btn-es').className = lang === 'es' ? 'text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-900 text-white' : 'text-[10px] font-bold px-3 py-1.5 rounded bg-zinc-100 text-zinc-400';
             document.getElementById('metabolism-label').innerText = translations[lang].metabolism;
             document.getElementById('op-zone-label').innerText = translations[lang].opZone;
             selectDay(currentDayId);
@@ -270,49 +509,51 @@
             document.getElementById('footer-day').innerText = `${data.date}: ${data['title_'+currentLang]}`;
             const content = document.getElementById('day-content');
             content.innerHTML = `
-                <div class="mb-8">
-                    <h3 class="text-4xl font-black text-zinc-900 leading-none tracking-tighter mb-2">${data['title_'+currentLang]}</h3>
-                    <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">${data.date} • ${t.fieldOps}</p>
+                <div class="mb-10">
+                    <h3 class="text-4xl font-black text-zinc-900 leading-none tracking-tighter mb-3">${data['title_'+currentLang]}</h3>
+                    <p class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.25em]">${data.date} • ${t.fieldOps}</p>
                 </div>
-                <div class="space-y-8">
+                <div class="space-y-12">
                     ${data.schedule.map((node, index) => `
                         <div class="timeline-item">
-                            <div class="flex justify-between items-baseline mb-2">
+                            <div class="flex justify-between items-baseline mb-4">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-[9px] font-black text-rose-600 bg-rose-50 px-2 py-0.5 rounded uppercase tracking-widest">${node.time}</span>
+                                    <span class="text-[10px] font-black text-rose-600 bg-rose-50 px-3 py-1 rounded uppercase tracking-widest">${node.time}</span>
                                     <span class="departure-tag uppercase tracking-tighter">${t.dep}: ${node['dep_'+currentLang]}</span>
                                 </div>
-                                <span class="text-[8px] font-bold text-zinc-300 uppercase">Seq 0${index + 1}</span>
+                                <span class="text-[9px] font-bold text-zinc-300 uppercase">Seq 0${index + 1}</span>
                             </div>
-                            <h4 class="font-black text-zinc-800 text-lg leading-tight mb-1">${node['act_'+currentLang]}</h4>
-                            <p class="text-xs text-zinc-500 mb-3 leading-relaxed">${node['note_'+currentLang]}</p>
-                            <section class="arch-card mb-4">
-                                <div class="grid grid-cols-1 gap-4 text-justify">
+                            <h4 class="font-black text-zinc-800 text-xl leading-tight mb-2">${node['act_'+currentLang]}</h4>
+                            <p class="text-sm text-zinc-500 mb-6 leading-relaxed italic">${node['note_'+currentLang]}</p>
+                            <section class="arch-card mb-6">
+                                <div class="grid grid-cols-1 gap-6 text-justify">
                                     <div>
                                         <span class="section-label">${t.cosmovision}</span>
-                                        <p class="text-[11px] text-zinc-600 leading-relaxed italic border-l-2 border-zinc-100 pl-3">${node.analysis['cosmovision_'+currentLang]}</p>
+                                        <p class="text-[12px] text-zinc-700 leading-relaxed">${node.analysis['cosmovision_'+currentLang]}</p>
                                     </div>
-                                    <div>
+                                    <div class="border-t border-zinc-100 pt-4">
                                         <span class="section-label">${t.drivers}</span>
-                                        <p class="text-[11px] text-zinc-600 leading-relaxed pl-3">${node.analysis['driver_'+currentLang]}</p>
+                                        <p class="text-[12px] text-zinc-700 leading-relaxed">${node.analysis['driver_'+currentLang]}</p>
                                     </div>
-                                    <div>
+                                    <div class="border-t border-zinc-100 pt-4">
                                         <span class="section-label">${t.aesthetics}</span>
-                                        <p class="text-[11px] text-zinc-800 leading-relaxed font-medium pl-3 bg-zinc-50 rounded-md py-1">${node.analysis['aesthetics_'+currentLang]}</p>
+                                        <p class="text-[12px] text-zinc-800 leading-relaxed font-medium bg-zinc-50 rounded-lg p-3 border border-zinc-100">${node.analysis['aesthetics_'+currentLang]}</p>
                                     </div>
                                 </div>
                             </section>
-                            <button id="audio-btn-${index}" onclick="playAISummary(${index})" class="audio-btn">🔊 <span>${t.listen}</span></button>
-                            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(node.loc)}" target="_blank" class="map-btn">📍 GPS Walk Navigation</a>
+                            <div class="grid grid-cols-1 gap-3">
+                                <button id="audio-btn-${index}" onclick="playAISummary(${index})" class="audio-btn shadow-md">🔊 <span>${t.listen}</span></button>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(node.loc)}" target="_blank" class="map-btn border border-zinc-200">📍 GPS Walk Navigation</a>
+                            </div>
                         </div>
                     `).join('')}
                 </div>
-                <div class="banksy-box shadow-xl">
-                    <div class="flex items-center gap-2 mb-4">
-                        <div class="w-1.5 h-6 bg-rose-600"></div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500">${t.hito}</span>
+                <div class="banksy-box shadow-lg">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-2 h-8 bg-rose-600"></div>
+                        <span class="text-[11px] font-black uppercase tracking-[0.3em] text-rose-500">${t.hito}</span>
                     </div>
-                    <p class="text-sm font-medium italic text-zinc-300 leading-relaxed">"${data['banksy_'+currentLang]}"</p>
+                    <p class="text-[15px] font-medium italic text-zinc-300 leading-relaxed">"${data['banksy_'+currentLang]}"</p>
                 </div>
             `;
             if(loadChart) {
